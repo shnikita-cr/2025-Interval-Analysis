@@ -5,19 +5,11 @@
 #include "tech.h"
 #include "equations/equation solving.h"
 #include "secondary/tech.h"
+#include "task/task.h"
 
 using DI = Interval<double>;
 using DIAM = AMatrix<DI>;
 //using ADMatrix = AMatrix<double>;
-
-
-DIAM getStartIntervalMatrix(double delta) {
-    return {
-            {DI(0.95 - delta, 0.95 + delta), DI(1.00 - delta, 1.00 + delta)},
-//            {DI(1.05 - delta, 1.05 + delta), DI(1.05 - delta, 1.05 + delta)},
-            {DI(1.10 - delta, 1.10 + delta), DI(1.10 - delta, 1.10 + delta)}
-    };
-}
 
 DI ff(double delta) {
     DIAM a = getStartIntervalMatrix(delta);
@@ -39,11 +31,9 @@ void bisection_test() {
 }
 
 void vis() {
-    double a = -5,
-            b = 5;
+    double a = 0, b = 5;
     uint32_t n = 300;
-    DVector x_h(n),
-            y_h(n);
+    DVector x_h(n), y_h(n);
 
     vectorFillXValues(x_h, a, b, n);
     vectorFillFValues(y_h, a, b, n, f);

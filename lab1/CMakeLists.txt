@@ -13,4 +13,4 @@ add_executable(lab1 main.cpp
         test_intervals.h
         tech.h
         main.h
-        main.h "equations/equation solving.h")
+        main.h "equations/equation solving.h" task/task.h)
