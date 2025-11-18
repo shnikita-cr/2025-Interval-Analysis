@@ -10,7 +10,7 @@ private:
     T down;
     T up;
 public:
-    Interval(T _down, T _up) : down(a), up(b) {}
+    Interval(T _down, T _up) : down(_down), up(_up) {}
 
     Interval(T _mid) : down(_mid), up(_mid) {}
 
@@ -53,6 +53,14 @@ public:
 
     friend Interval operator-(const Interval<T> &l, const Interval<T> &r) {
         return Interval(l.down - r.up, l.up - r.down);
+    }
+
+    friend Interval operator*(const Interval<T> &l, const T r) {
+        return Interval(l.down * r, l.up * r);
+    }
+
+    friend Interval operator/(const Interval<T> &l, const T r) {
+        return Interval(l.down / r, l.up / r);
     }
 
     friend Interval operator*(const Interval<T> &l, const Interval<T> &r) {
