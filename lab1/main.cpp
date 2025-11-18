@@ -1,16 +1,17 @@
 #include <iostream>
 #include "secondary/amatrix/amatrix.h"
 #include "interval/interval.h"
+#include "test_intervals.h"
 #include "tech.h"
 #include "equations/equation solving.h"
 #include "secondary/tech.h"
 
 using DI = Interval<double>;
-using ADIM = AMatrix<DI>;
+using DIAM = AMatrix<DI>;
 //using ADMatrix = AMatrix<double>;
 
 
-ADIM getStartIntervalMatrix(double delta) {
+DIAM getStartIntervalMatrix(double delta) {
     return {
             {DI(0.95 - delta, 0.95 + delta), DI(1.00 - delta, 1.00 + delta)},
 //            {DI(1.05 - delta, 1.05 + delta), DI(1.05 - delta, 1.05 + delta)},
@@ -19,7 +20,7 @@ ADIM getStartIntervalMatrix(double delta) {
 }
 
 DI ff(double delta) {
-    ADIM a = getStartIntervalMatrix(delta);
+    DIAM a = getStartIntervalMatrix(delta);
     return det(a);
 }
 
@@ -29,12 +30,9 @@ double f(double delta) {
 }
 
 void bisection_test() {
-    double a = 0,
-            b = 5,
-            eps = 0.001;
+    double a = 0, b = 5, eps = 0.001;
 
-    auto ans = bisection_method(f,
-                                a, b, eps);
+    auto ans = bisection_method(f, a, b, eps);
     std::cout << "ans: " << ans << std::endl;
     std::cout << "det ans: " << ff(ans) << std::endl;
     std::cout << getStartIntervalMatrix(ans) << std::endl;
