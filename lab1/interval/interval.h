@@ -10,9 +10,9 @@ private:
     T down;
     T up;
 public:
-    Interval(T a, T b) : down(a), up(b) {}
+    Interval(T _down, T _up) : down(a), up(b) {}
 
-    Interval(T v) : down(v), up(v) {}
+    Interval(T _mid) : down(_mid), up(_mid) {}
 
     bool operator==(const Interval &rhs) const {
         return down == rhs.down &&
