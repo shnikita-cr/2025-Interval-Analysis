@@ -24,7 +24,7 @@ public:
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Interval &interval) {
-        os << "interval : [" << interval.down << ", " << interval.up << "]";
+        os << "interval: [" << interval.down << ", " << interval.up << "]";
         return os;
     }
 
