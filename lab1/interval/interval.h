@@ -49,6 +49,8 @@ public:
 
     T getUp() const { return up; }
 
+    T getWidth() const { return up - down; }
+
     // Comparison operators
     friend bool operator>(const Interval<T> &l, const Interval<T> &r) {
         return l.down > r.up;
