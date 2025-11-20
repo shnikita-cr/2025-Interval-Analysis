@@ -31,6 +31,7 @@ uint32_t vectorToFile(DVector &v, const std::string &file_name) {
                 counter++;
             }
         }
+        std::cout << counter << " values written to from vector to file " << file_name << std::endl;
         return counter;
     }
     std::cerr << "error opening file " << file_name << std::endl;
@@ -49,6 +50,7 @@ void vectorFillXValues(DVector &x_h, double a, double b, uint32_t n) {
     for (uint32_t i = 0; i < n; i++) {
         x_h[i] = a + i * h;
     }
+    std::cout<<n<<" values filled to vector"<<std::endl;
 }
 
 void vectorFillFValues(DVector &y_h, double a, double b, uint32_t n, double f(double)) {
