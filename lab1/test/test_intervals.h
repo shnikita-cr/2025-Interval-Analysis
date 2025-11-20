@@ -3,7 +3,7 @@
 
 void test_ar() {
     Interval x(1, 2);
-    std::cout << "Initial: "<< x << std::endl;
+    std::cout << "Initial: " << x << std::endl;
     std::cout << x + x << std::endl;
     std::cout << x - x << std::endl;
     std::cout << x * x << std::endl;
