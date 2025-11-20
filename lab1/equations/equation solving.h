@@ -32,7 +32,7 @@ double bisection_method(double f(double), double a, double b, double eps) {
                       << c << std::endl;
             //cout << "\t\t" << setprecision(PRECISION) << iter << "\t" << abs(true_x - c) << endl;
         }
-        if (f(a) * f(c) < 0) {
+        if (f(a) * f(c) <= 0) {
             b = c;
         } else {
             a = c;
