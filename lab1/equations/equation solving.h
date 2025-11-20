@@ -16,7 +16,7 @@
 #define TARGET_DATA "iter"
 //#define TARGET_DATA "flaw"
 
-double bisection_method(double f(double), double a, double b, double eps) {
+double calcMethod(double f(double), double a, double b, double eps) {
     double c;
     size_t iter = 0;
     std::cout.setf(std::ios::fixed);

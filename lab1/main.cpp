@@ -12,8 +12,8 @@ using DIAM = AMatrix<DI>;
 int main() {
     std::cout << "main()" << std::endl;
     vis();
-    bisection_test();
-//    test_f();
+    calcTest();
+//    testF();
     return 0;
 }
 

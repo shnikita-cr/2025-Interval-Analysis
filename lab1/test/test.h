@@ -9,11 +9,11 @@ double f(double delta) {
     return allContainZero(delta);
 }
 
-void bisection_test() {
-    std::cout << "bisection_test()" << std::endl;
+void calcTest() {
+    std::cout << "calcTest()" << std::endl;
     double eps = 0.0001;
 
-    auto ans = bisection_method(f, A, B, eps);
+    auto ans = calcMethod(f, A, B, eps);
     std::cout << "ans: " << ans << std::endl;
     std::cout << getStartIntervalMatrix(ans) << std::endl;
     auto dets = calculateAllDeterminants(getStartIntervalMatrix(ans));
@@ -24,7 +24,7 @@ void bisection_test() {
     std::cout << std::endl;
 }
 
-void test_f() {
+void testF() {
     double delta = 0;
     while (true) {
         std::cin >> delta;
