@@ -18,32 +18,35 @@
 
 double bisection_method(double f(double), double a, double b, double eps) {
     double c;
-    int iter = 0;
+    size_t iter = 0;
     std::cout.setf(std::ios::fixed);
     if (VERBOSE) {
         std::cout << "bisection method" << std::endl;
         std::cout << "\tbegin" << std::endl;
     }
-    while (2 * eps < fabs(b - a)) {
-        c = (a + b) / 2;
-        if (VERBOSE) {
-            std::cout << "\t#" << iter << "\ta==" << a << "\tf(a)==" << f(a) << "\tb==" << b << "\tf(b)==" << f(b)
-                      << "\tc=="
-                      << c << std::endl;
-            //cout << "\t\t" << setprecision(PRECISION) << iter << "\t" << abs(true_x - c) << endl;
+    double ans = 0;
+    while (fabs(b - a) > 2 * eps) {
+        size_t n = ceil((b - a) / eps);
+        DVector x(n);
+        vectorFillXValues(x, a, b, n);
+        for (size_t i = 0; i < n; i++) {
+            if (i == 0)
+                continue;
+            if (f(x[i - 1]) == 0 && f(x[i]) == 1) {
+                a = x[i - 1];
+                b = x[i];
+                ans = b;
+                break;
+            }
+            iter++;
         }
-        if (f(a) * f(c) <= 0) {
-            b = c;
-        } else {
-            a = c;
-        }
-        iter++;
     }
+
     if (VERBOSE) {
         std::cout << "\tend" << std::endl;
-        std::cout << "iterations: " << iter << std::endl << std::endl;
+        std::cout << "\titerations: " << iter << std::endl << std::endl;
+        std::cout << "2*eps: " << 2 * eps << " fabs(b-a): " << fabs(b - a) << std::endl << std::endl;
     }
-    double ans = (a + b) / 2;
 
     if (VERBOSE) {
         std::cout << "ans" << std::endl;
@@ -54,7 +57,6 @@ double bisection_method(double f(double), double a, double b, double eps) {
         //cout << "\tflaw:" << setprecision(PRECISION) << true_x - ans << endl;
 
     }
-
     return ans;
 }
 
