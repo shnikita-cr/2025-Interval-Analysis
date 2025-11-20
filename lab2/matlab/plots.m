@@ -1,7 +1,9 @@
 x_h =  load('..\data\x_h.txt');
-y_h =  load('..\data\y_h.txt');
+y_f_linear =  load('..\data\y_f_linear.txt');
 
-plot(x_h,y_h, '-o');
-legend('f');
+
+plot(x_h,y_f_linear, '-');
 set(gca, 'XAxisLocation', 'origin')
 grid on
+hold on
+legend('y\_f\_linear')

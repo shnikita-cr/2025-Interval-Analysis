@@ -205,4 +205,8 @@ public:
     friend bool operator!=(const T &l, const Interval<T> &r) {
         return !(r == l);
     }
+
+    Interval map(std::function<T(T)> f) const {
+        return {f(down), f(up)};
+    }
 };
