@@ -1,5 +1,5 @@
 #include <iostream>
-#include "interval/interval.h"
+#include "../interval/interval.h"
 
 void test_ar() {
     Interval x(1, 2);
