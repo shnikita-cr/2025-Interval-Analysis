@@ -206,7 +206,7 @@ AMatrix<T> &AMatrix<T>::operator=(const AMatrix<T> &right) {
 }
 
 template<typename T>
-AMatrixDoubleType AMatrix<T>::norm(long p) const {
+T AMatrix<T>::norm(long p) const {
     switch (p) {
         case 1:
             return norm1();
@@ -220,17 +220,17 @@ AMatrixDoubleType AMatrix<T>::norm(long p) const {
 }
 
 template<typename T>
-AMatrixDoubleType AMatrix<T>::det() const {
+T AMatrix<T>::det() const {
     if (rows != cols || cols == 0)
         throw std::length_error("AMatrix det: wrong dimensions of matrix");
     switch (rows) {
         case 1:
-            return static_cast<AMatrixDoubleType>(mat[0][0]);
+            return static_cast<T>(mat[0][0]);
         case 2:
             return (mat[0][0] * mat[1][1]) - (mat[1][0] * mat[0][1]);
         default:
             int k = 1;//(-1)^1
-            AMatrixDoubleType result = 0;
+            T result = 0;
             for (int i = 0; i < rows; i++) {
                 result += k * mat[i][0] * getMatr(i, 0).det();
                 k *= -1;
@@ -240,7 +240,7 @@ AMatrixDoubleType AMatrix<T>::det() const {
 }
 
 template<typename T>
-AMatrixDoubleType AMatrix<T>::cond(long int p) const {
+T AMatrix<T>::cond(long int p) const {
     if (isDiag() == 0)
         return pow((*this).norm(p), 2);
     return condD();

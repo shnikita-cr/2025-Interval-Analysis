@@ -8,9 +8,7 @@
 
 #define AVECTOR_VERBOSE 0
 
-using AVectorDoubleType = double;
-
-const AVectorDoubleType AVECTOR_EPS = 10e-10;
+const double AVECTOR_EPS = 10e-10;
 const int AVECTOR_PRECISION = 5, AVECTOR_MAX_ELEMENT_WIDTH = AVECTOR_PRECISION + 5;
 const long int AVECTOR_RAND_END = 100, AVECTOR_RAND_START = 0;
 
@@ -37,18 +35,16 @@ public:
 
     //info
     std::size_t getDim() const { return dim; }
-    AVectorDoubleType norm(long int p = 2) const;
+    T norm(long int p = 2) const;
     bool isSameDimensions(const AVector &other) const {return (dim == other.dim);}
 
     //io
-    template<typename K>
-    friend void operator>>(std::istream &in, AVector<K> &av) {
+    friend void operator>>(std::istream &in, AVector<T> &av) {
         for (std::size_t i = 0; i < av.dim; i++) {
             in >> av[i];
         }
     }
-    template<typename K>
-    friend std::ostream &operator<<(std::ostream &out, const AVector<K> &av) {
+    friend std::ostream &operator<<(std::ostream &out, const AVector<T> &av) {
         out << "vector " << av.name << ":" << std::endl;
         for (std::size_t i = 0; i < av.dim; i++) {
             if (AVECTOR_VERBOSE) {

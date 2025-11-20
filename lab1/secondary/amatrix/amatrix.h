@@ -9,11 +9,11 @@
 #include "../../interval/interval.h"
 
 #include "../../main.h"
+
 #define AMATRIX_VERBOSE 0
 
-using AMatrixDoubleType = Interval<double>;
 
-const AMatrixDoubleType AMATRIX_EPS = AMatrixDoubleType(10e-10, 10e-10);
+const double AMATRIX_EPS = 10e-10;
 const int AMATRIX_PRECISION = PRECISION, AMATRIX_MAX_ELEMENT_WIDTH = AMATRIX_PRECISION + 4;
 const long int AMATRIX_RAND_END = 100, AMATRIX_RAND_START = 0;
 
@@ -75,11 +75,11 @@ public:
 
     std::size_t getCols() const { return cols; }
 
-    AMatrixDoubleType norm(long int p = 2) const;
+    T norm(long int p = 2) const;
 
-    AMatrixDoubleType det() const;
+    T det() const;
 
-    AMatrixDoubleType cond(long int p = 2) const;
+    T cond(long int p = 2) const;
 
     T maxComponent();
 

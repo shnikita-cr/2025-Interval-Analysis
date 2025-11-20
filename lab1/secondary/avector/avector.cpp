@@ -95,11 +95,11 @@ bool AVector<T>::operator==(const AVector<T> &other) const {
 }
 
 template<typename T>
-AVectorDoubleType AVector<T>::norm(long int p) const {
+T AVector<T>::norm(long int p) const {
     if (values.empty()) {
         return 0;
     }
-    AVectorDoubleType d = 0;
+    T d = 0;
     switch (p) {
         case 1:
             for (auto i: values) {
@@ -124,7 +124,7 @@ AVectorDoubleType AVector<T>::norm(long int p) const {
 
 template<typename T>
 AVector<T> &AVector<T>::normalize(long int p) {
-    AVectorDoubleType n = norm(p);
+    T n = norm(p);
     if (n == 0) {
         throw std::runtime_error("AVector normalize: / 0");
     }
