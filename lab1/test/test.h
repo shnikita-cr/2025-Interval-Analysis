@@ -16,6 +16,11 @@ void bisection_test() {
     auto ans = bisection_method(f, A, B, eps);
     std::cout << "ans: " << ans << std::endl;
     std::cout << getStartIntervalMatrix(ans) << std::endl;
+    auto dets = calculateAllDeterminants(getStartIntervalMatrix(ans));
+    for (const auto &d: dets) {
+        std::cout << "\tresult matrix det: " << d << std::endl;
+    }
+    std::cout << std::endl;
 }
 
 void test_f() {
@@ -24,15 +29,15 @@ void test_f() {
         std::cin >> delta;
         std::cout << "delta: " << delta << std::endl;
         auto dets = calculateAllDeterminants(getStartIntervalMatrix(delta));
-        std::cout << "zero: " << aggregate_dets(dets, [](const std::vector<DI> &d) {
+        std::cout << "sum: " << aggregate_dets(dets, [](const std::vector<DI> &d) {
             DI res = 0;
             for (auto &i: d) {
+                std::cout << "\tdet_i: " << i << std::endl;
                 res += i;
             }
             return res;
-        })
-                  << std::endl;
-        std::cout << "matrix: " << getStartIntervalMatrix(delta) << std::endl;
+        }) << std::endl;
+        std::cout << "matrix delta: " << getStartIntervalMatrix(delta) << std::endl;
     }
 }
 
