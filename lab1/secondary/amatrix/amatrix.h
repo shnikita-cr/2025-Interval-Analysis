@@ -8,12 +8,13 @@
 #include "../avector/avector.h"
 #include "../../interval/interval.h"
 
+#include "../../main.h"
 #define AMATRIX_VERBOSE 0
 
 using AMatrixDoubleType = Interval<double>;
 
 const AMatrixDoubleType AMATRIX_EPS = AMatrixDoubleType(10e-10, 10e-10);
-const int AMATRIX_PRECISION = 5, AMATRIX_MAX_ELEMENT_WIDTH = AMATRIX_PRECISION + 4;
+const int AMATRIX_PRECISION = PRECISION, AMATRIX_MAX_ELEMENT_WIDTH = AMATRIX_PRECISION + 4;
 const long int AMATRIX_RAND_END = 100, AMATRIX_RAND_START = 0;
 
 template<typename T>
