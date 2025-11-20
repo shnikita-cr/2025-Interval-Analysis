@@ -24,7 +24,7 @@ double bisection_method(double f(double), double a, double b, double eps) {
         std::cout << "bisection method" << std::endl;
         std::cout << "\tbegin" << std::endl;
     }
-    while (2 * eps < abs(b - a)) {
+    while (2 * eps < fabs(b - a)) {
         c = (a + b) / 2;
         if (VERBOSE) {
             std::cout << "\t#" << iter << "\ta==" << a << "\tf(a)==" << f(a) << "\tb==" << b << "\tf(b)==" << f(b)
