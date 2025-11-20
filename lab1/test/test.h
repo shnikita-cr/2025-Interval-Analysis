@@ -11,14 +11,15 @@ double f(double delta) {
 
 void bisection_test() {
     std::cout << "bisection_test()" << std::endl;
-    double eps = 0.001;
+    double eps = 0.0001;
 
     auto ans = bisection_method(f, A, B, eps);
     std::cout << "ans: " << ans << std::endl;
     std::cout << getStartIntervalMatrix(ans) << std::endl;
     auto dets = calculateAllDeterminants(getStartIntervalMatrix(ans));
     for (const auto &d: dets) {
-        std::cout << "\tresult matrix det: " << d << std::endl;
+        std::cout << "\tresult matrix det: " << d;
+        std::cout << "\tcontains zero? " << d.contains(0) << std::endl;
     }
     std::cout << std::endl;
 }
@@ -32,7 +33,7 @@ void test_f() {
         std::cout << "sum: " << aggregate_dets(dets, [](const std::vector<DI> &d) {
             DI res = 0;
             for (auto &i: d) {
-                std::cout << "\tdet_i: " << i << std::endl;
+                std::cout << "\tdet_i: " << i << " contains 0? " << i.contains(0) << std::endl;
                 res += i;
             }
             return res;
