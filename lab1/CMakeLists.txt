@@ -10,7 +10,7 @@ add_executable(lab1 main.cpp
         secondary/amatrix/amatrix.cpp
         "secondary/matrix creating.h"
         secondary/tech.h interval/interval.h
-        test_intervals.h
+        test/test_intervals.h
         tech.h
         main.h
-        main.h "equations/equation solving.h" task/task.h)
+        main.h "equations/equation solving.h" task/task.h test/test.h)
