@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.25)
+project(lab1)
+
+set(CMAKE_CXX_STANDARD 23)
+
+add_executable(lab1 main.cpp
+        secondary/amatrix/amatrix.h
+        secondary/avector/avector.h
+        secondary/avector/avector.cpp
+        secondary/amatrix/amatrix.cpp
+        "secondary/matrix creating.h"
+        secondary/tech.h interval/interval.h
+        test/test_intervals.h
+        tech.h
+        main.h
+        main.h "equations/equation solving.h" task/task.h test/test.h)
