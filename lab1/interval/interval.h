@@ -46,6 +46,30 @@ public:
         }
     }
 
+    T getDown() const {
+        return down;
+    }
+
+    T getUp() const {
+        return up;
+    }
+
+    // Comparison operators
+    friend bool operator>(const Interval<T> &l, const Interval<T> &r) {
+        return l.down > r.up; // Entire interval l is greater than entire interval r
+    }
+
+    friend bool operator>=(const Interval<T> &l, const Interval<T> &r) {
+        return l.down >= r.up; // Entire interval l is greater than or equal to entire interval r
+    }
+
+    friend bool operator<(const Interval<T> &l, const Interval<T> &r) {
+        return l.up < r.down; // Entire interval l is less than entire interval r
+    }
+
+    friend bool operator<=(const Interval<T> &l, const Interval<T> &r) {
+        return l.up <= r.down; // Entire interval l is less than or equal to entire interval r
+    }
 
     friend Interval operator+(const Interval<T> &l, const Interval<T> &r) {
         return Interval(l.down + r.down, l.up + r.up);
