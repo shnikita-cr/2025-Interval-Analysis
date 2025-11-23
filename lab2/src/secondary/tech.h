@@ -5,10 +5,10 @@
 #include <vector>
 #include <string>
 #include <iomanip>
+#include "../main.h"
 
-//main.h
 using DVector = std::vector<double>;
-const int TECH_PRECISION = 5, TECH_MAX_ELEMENT_WIDTH = TECH_PRECISION + 5;
+const int TECH_PRECISION = PRECISION, TECH_MAX_ELEMENT_WIDTH = TECH_PRECISION + 5;
 
 //#define VECTOR_TO_FILE_PUTPUT_STYLE "fixed"
 #define VECTOR_TO_FILE_PUTPUT_STYLE "scientific"
@@ -50,7 +50,7 @@ void vectorFillXValues(DVector &x_h, double a, double b, uint32_t n) {
     for (uint32_t i = 0; i < n; i++) {
         x_h[i] = a + i * h;
     }
-    std::cout<<n<<" values filled to vector"<<std::endl;
+    std::cout << n << " values filled to vector" << std::endl;
 }
 
 void vectorFillFValues(DVector &y_h, double a, double b, uint32_t n, double f(double)) {
@@ -58,7 +58,7 @@ void vectorFillFValues(DVector &y_h, double a, double b, uint32_t n, double f(do
     for (uint32_t i = 0; i < n; i++) {
         y_h[i] = f(a + i * step);
     }
-    std::cout<<n<<" values filled to vector"<<std::endl;
+    std::cout << n << " values filled to vector" << std::endl;
 }
 
 void vectorToDisplay(const DVector &v, const std::string &vector_name) {
