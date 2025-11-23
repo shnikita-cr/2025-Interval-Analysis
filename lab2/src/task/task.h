@@ -5,8 +5,14 @@
 
 using DI = Interval<double>;
 
-double f1_linear(double x) {
+double f1(double x) {
     return pow(x, 3) - 3 * pow(x, 2) + 2;
 }
 
 double A1 = 0, B1 = 3;
+
+double f2(double x) {
+    return pow(x, 5) - 2 * pow(x, 3) + sin(x);
+}
+
+double A2 = 0, B2 = 100;
