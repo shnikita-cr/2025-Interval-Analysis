@@ -4,6 +4,10 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <iomanip>
+#include "../main.h"
+
+const int INTERVAL_PRECISION = PRECISION, INTERVAL_MAX_ELEMENT_WIDTH = INTERVAL_PRECISION + 5;
 
 template<class T>
 class Interval {
@@ -25,7 +29,8 @@ public:
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Interval &interval) {
-        os << "interval: [" << interval.down << ", " << interval.up << "]";
+        std::cout << std::fixed << std::setprecision(INTERVAL_PRECISION);
+        os << "interval: [" << std::setw(INTERVAL_MAX_ELEMENT_WIDTH) << interval.down << ", " << interval.up << "]";
         return os;
     }
 
