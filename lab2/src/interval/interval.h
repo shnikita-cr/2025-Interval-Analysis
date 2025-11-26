@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ostream>
+#include <iostream>
 #include <vector>
 #include <algorithm>
 #include <cmath>
@@ -19,13 +19,13 @@ public:
 
     Interval(T _mid) : down(_mid), up(_mid) {}
 
-    bool operator==(const Interval &rhs) const {
+    bool operator==(const Interval<T> &rhs) const {
         return down == rhs.down &&
                up == rhs.up;
     }
 
-    bool operator!=(const Interval &rhs) const {
-        return !(*this == rhs);
+    bool operator!=(const Interval<T> &rhs) const {
+        return *this != rhs;
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Interval &interval) {
@@ -42,6 +42,10 @@ public:
         return down <= x && x <= up;
     }
 
+    bool in(const Interval<T> &rhs) {
+        return down >= rhs.down && up <= rhs.up;
+    }
+
     T zeroDepth() const {
         if (down <= 0 && up >= 0) {
             return std::min(std::abs(down), std::abs(up));
@@ -55,6 +59,55 @@ public:
     T getUp() const { return up; }
 
     T getWidth() const { return up - down; }
+
+    T getMid() const { return (up + down) / 2; }
+
+    T getRad() const { return getWidth() / 2; }
+
+    int getSgn() const {
+        if (down >= 0 && up >= 0) {
+            return 1;
+        } else if (down <= 0 && up <= 0) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
+
+    T abs() const {
+        return std::max(std::abs(up), std::abs(down));
+    }
+
+    T magn() const {
+        if (this->contains(0)) {
+            return 0;
+        } else {
+            return std::min(std::abs(up), std::abs(down));
+        }
+    }
+
+    friend Interval pow(const Interval<T> &I, unsigned const int n) {
+        Interval<T> res = I;
+        for (unsigned int i = 0; i < n; i++) {
+            res = res * I;
+        }
+        return res;
+    }
+
+    T hi() {
+        if (*this == 0) {
+            return 0;
+        }
+        if (std::abs(down) <= std::abs(up)) {
+            return down / up;
+        } else {
+            return up / down;
+        }
+    }
+
+    friend T dist(const Interval<T> &lhs, const Interval<T> &rhs) {
+        return std::max(std::abs(lhs.down - rhs.down), std::abs(lhs.up - rhs.up));
+    }
 
     // Comparison operators
     friend bool operator>(const Interval<T> &l, const Interval<T> &r) {
@@ -200,7 +253,7 @@ public:
     }
 
     friend bool operator!=(const Interval<T> &l, const T &r) {
-        return !(l == r);
+        return l != r;
     }
 
     friend bool operator==(const T &l, const Interval<T> &r) {
@@ -208,7 +261,7 @@ public:
     }
 
     friend bool operator!=(const T &l, const Interval<T> &r) {
-        return !(r == l);
+        return r != l;
     }
 
     Interval map(std::function<T(T)> f) const {
