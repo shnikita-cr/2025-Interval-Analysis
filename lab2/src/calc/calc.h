@@ -38,3 +38,27 @@ DI ran(double (*f)(double), double a, double b, uint32_t n) {
 
     return {min_val, max_val};
 }
+
+double find_l(const Task &task) {
+    return 0;
+}
+
+DI estimate_f_B1(const Task &task) {
+    return DI(0);
+}
+
+DI estimate_f_B2(const Task &task) {
+    return DI(0);
+}
+
+DI estimate_f_B3(const Task &task) {
+    return DI(0);
+}
+
+DI estimate_f_B4(const Task &task) {
+    return DI(0);
+}
+
+DI estimate_f_B5(const Task &task) {
+    return DI(0);
+}
