@@ -1,5 +1,5 @@
 x_h =  load('..\data\x_h.txt');
-y_f_linear =  load('..\data\y_f_linear.txt');
+y_f_linear =  load('..\data\y_f.txt');
 
 
 plot(x_h,y_f_linear, '-');
