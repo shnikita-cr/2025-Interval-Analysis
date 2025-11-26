@@ -1,32 +1,15 @@
-#include <iostream>
 #include "interval/interval.h"
-#include "secondary/tech.h"
-#include "task/task.h"
+#include "test/test_intervals.h"
+#include "test/test.h"
 
 using DI = Interval<double>;
 
-double f(double x) {
-    return f1(x);
-}
-
-double A = A1, B = B1;
-
-//double f(double x) {
-//    return f2(x);
-//}
-//
-//double A = A2, B = B2;
+Task task1{A1, B1, f1, DOT_COUNT};
+Task task2{A2, B2, f2, DOT_COUNT};
 
 int main() {
-    std::cout << "main()" << std::endl;
-    std::cout << DI(0) << std::endl;
-
-    size_t n = 100;
-    DVector x(n), y_f_linear(n), y_f_width(n);
-    vectorFillXValues(x, A, B, n);
-    vectorFillFValues(y_f_linear, A, B, n, f);
-
-    vectorToFile(x, "../../data/x_h.txt");
-    vectorToFile(y_f_linear, "../../data/y_f_linear.txt");
+    test_task(task1);
+//    test_task(task2);
+//    test_intervals();
     return 0;
 }
