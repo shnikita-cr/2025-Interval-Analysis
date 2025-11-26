@@ -86,12 +86,17 @@ public:
         }
     }
 
-    friend Interval pow(const Interval<T> &I, unsigned const int n) {
+    friend Interval pow_i(const Interval<T> &I, unsigned const int n) {
         Interval<T> res = I;
         for (unsigned int i = 0; i < n; i++) {
             res = res * I;
         }
         return res;
+    }
+
+    void sortEnds() {
+        down = std::min(down, up);
+        up = std::max(down, up);
     }
 
     T hi() {
