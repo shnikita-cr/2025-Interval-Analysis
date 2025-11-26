@@ -10,4 +10,4 @@ add_executable(lab2
         interval/interval.h
         task/task.h
         test/test.h
-        test/test_intervals.h secondary/tech.h)
+        test/test_intervals.h secondary/tech.h calc/calc.h)
