@@ -270,7 +270,7 @@ public:
     }
 
     template<typename F, typename ...Args>
-    Interval map(const F&  f, const Args&... args) const {
+    Interval map(const F &f, const Args &... args) const {
         return Interval(f(down, args...), f(up, args...));
     }
 };
