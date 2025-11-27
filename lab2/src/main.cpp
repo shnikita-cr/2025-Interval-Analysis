@@ -4,8 +4,8 @@
 
 using DI = Interval<double>;
 
-Task task1{A1, B1, f1, DOT_COUNT};
-Task task2{A2, B2, f2, DOT_COUNT};
+Task task1{X1, f1, f1_i, f1_g, f1_p, DOT_COUNT};
+Task task2{X2, f2, f2_i, f2_g, f2_p, DOT_COUNT};
 
 int main() {
     test_task(task1);
