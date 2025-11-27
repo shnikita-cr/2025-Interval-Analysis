@@ -19,7 +19,7 @@ void test_intervals() {
     std::cout << (-1) * b << std::endl;
 
     std::cout << c.in(b) << std::endl;
-    std::cout << pow(d, 3) << std::endl;
+    std::cout << pow_i(d, 3) << std::endl;
 
     std::cout << e.abs() << std::endl;
     std::cout << e.hi() << std::endl;
