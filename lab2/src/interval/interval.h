@@ -269,7 +269,8 @@ public:
         return r != l;
     }
 
-    Interval map(std::function<T(T)> f) const {
-        return {f(down), f(up)};
+    template<typename F, typename ...Args>
+    Interval map(const F&  f, const Args&... args) const {
+        return Interval(f(down, args...), f(up, args...));
     }
 };
