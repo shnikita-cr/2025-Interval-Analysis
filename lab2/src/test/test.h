@@ -30,7 +30,7 @@ void test_task(const Task &task) {
     std::cout << "rad(F(X)) = " << left_B1 << "; L*rad(X) = " << right_B1 << std::endl;
     std::cout << "L*rad(X) - rad(F(X)) = " << right_B1 - left_B1 << std::endl;
     std::cout << "rad(F(X)) <= L*rad(X) == 1? " << (left_B1 <= right_B1) << std::endl;
-    std::cout << "inaccuracy = " << estimate_value_B1.getWidth() << std::endl;
+    std::cout << "inaccuracy = " << estimate_value_B1.getWidth()/2 << std::endl;
 
     //B2
     std::cout << "========================B2====================================" << std::endl;
@@ -44,7 +44,7 @@ void test_task(const Task &task) {
     std::cout << "rad(F(X)) = " << left_B2 << "; L*rad(X) = " << right_B2 << std::endl;
     std::cout << "L*rad(X) - rad(F(X)) = " << right_B2 - left_B2 << std::endl;
     std::cout << "rad(F(X)) <= L*rad(X) == 1? " << (left_B2 <= right_B2) << std::endl;
-    std::cout << "inaccuracy = " << estimate_value_B2.getWidth() << std::endl;
+    std::cout << "inaccuracy = " << estimate_value_B2.getWidth()/2 << std::endl;
 
     //B3
     std::cout << "========================B3====================================" << std::endl;
@@ -58,7 +58,7 @@ void test_task(const Task &task) {
     std::cout << "rad(F(X)) = " << left_B3 << "; L*rad(X) = " << right_B3 << std::endl;
     std::cout << "L*rad(X) - rad(F(X)) = " << right_B3 - left_B3 << std::endl;
     std::cout << "rad(F(X)) <= L*rad(X) == 1? " << (left_B3 <= right_B3) << std::endl;
-    std::cout << "inaccuracy = " << estimate_value_B3.getWidth() << std::endl;
+    std::cout << "inaccuracy = " << estimate_value_B3.getWidth()/2 << std::endl;
 
     //B4
     std::cout << "========================B4====================================" << std::endl;
@@ -72,7 +72,7 @@ void test_task(const Task &task) {
     std::cout << "rad(F(X)) = " << left_B4 << "; L*rad(X) = " << right_B4 << std::endl;
     std::cout << "L*rad(X) - rad(F(X)) = " << right_B4 - left_B4 << std::endl;
     std::cout << "rad(F(X)) <= L*rad(X) == 1? " << (left_B4 <= right_B4) << std::endl;
-    std::cout << "inaccuracy = " << estimate_value_B4.getWidth() << std::endl;
+    std::cout << "inaccuracy = " << estimate_value_B4.getWidth()/2 << std::endl;
 
     std::cout << "========================B5====================================" << std::endl;
 
@@ -86,6 +86,5 @@ void test_task(const Task &task) {
     std::cout << "rad(F(X)) = " << left_B5 << "; L*rad(X) = " << right_B5 << std::endl;
     std::cout << "L*rad(X) - rad(F(X)) = " << right_B5 - left_B5 << std::endl;
     std::cout << "rad(F(X)) <= L*rad(X) == 1? " << (left_B5 <= right_B5) << std::endl;
-    std::cout << "inaccuracy = " << estimate_value_B5.getWidth() << std::endl;
-
+    std::cout << "inaccuracy = " << estimate_value_B5.getWidth()/2 << std::endl;
 }
