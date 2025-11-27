@@ -74,9 +74,9 @@ DI estimate_f_B3(const Task &task) {
     std::vector<DI> numbers = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
     std::vector<double> ms = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
 
-    std::for_each(numbers.begin(), numbers.end(), [&](DI &n) {
-        n = task.f(n.getMid()) + task.f_pi(task.x) * (task.x - n);
-        printAll(n);
+    std::for_each(numbers.begin(), numbers.end(), [&](DI &m) {
+        m = task.f(m.getMid()) + task.f_pi(task.x) * (task.x - m);
+        printAll("interval for Mi", m);
     });
 
     DI min_number = numbers.front();
@@ -94,7 +94,26 @@ DI estimate_f_B3(const Task &task) {
 }
 
 DI estimate_f_B4(const Task &task) {
-    return DI(0);
+    std::vector<DI> numbers = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
+    std::vector<double> ms = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
+
+    std::for_each(numbers.begin(), numbers.end(), [&](DI &m) {
+        m = task.f_i(m) + (task.f_i(task.x) - task.f_i(m)) / (task.x - m) * (task.x - m);
+        printAll("interval for Mi", m);
+    });
+
+    DI min_number = numbers.front();
+    double min_m = ms.front();
+
+    for (size_t i = 0; i < numbers.size(); i++) {
+        if (numbers[i].getWidth() < min_number.getWidth()) {
+            min_number = numbers[i];
+            min_m = ms[i];
+        }
+    }
+
+    printAll("m:", min_m);
+    return min_number;
 }
 
 DI estimate_f_B5(const Task &task) {
