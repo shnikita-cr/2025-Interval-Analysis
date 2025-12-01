@@ -114,6 +114,15 @@ public:
         return std::max(std::abs(lhs.down - rhs.down), std::abs(lhs.up - rhs.up));
     }
 
+    friend T cut(const T &x, const Interval<T> &X) {
+        if (x > X.getUp())
+            return X.getUp();
+        else if (x < X.getDown())
+            return X.getDown();
+        else
+            return x;
+    }
+
     // Comparison operators
     friend bool operator>(const Interval<T> &l, const Interval<T> &r) {
         return l.down > r.up;
