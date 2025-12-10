@@ -75,8 +75,12 @@ DI estimate_f_B3(const Task &task) {
     std::vector<double> ms = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
 
     std::for_each(numbers.begin(), numbers.end(), [&](DI &m) {
+        printAll("x - Mi", (task.x - m));
+        printAll("f'(x)", task.f_pi(task.x), "x: ", task.x);
+        printAll("f'(x)*f(x-m)", task.f_pi(task.x) * (task.x - m));
         m = task.f(m.getMid()) + task.f_pi(task.x) * (task.x - m);
         printAll("interval for Mi", m);
+        printAll("");
     });
 
     DI min_number = numbers.front();
@@ -97,9 +101,12 @@ DI estimate_f_B4(const Task &task) {
     std::vector<DI> numbers = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
     std::vector<double> ms = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
 
+    printAll(ms.front(), ms.back());
+
     std::for_each(numbers.begin(), numbers.end(), [&](DI &m) {
-        m = task.f_i(m) + (task.f_i(task.x) - task.f_i(m)) / (task.x - m) * (task.x - m);
-        printAll("interval for Mi", m);
+        m = task.f_i(m) + (task.f_i(task.x) - task.f_i(m));
+//                / (task.x - m) * (task.x - m);
+        printAll("interval for x - Mi", (task.x - m));
     });
 
     DI min_number = numbers.front();
