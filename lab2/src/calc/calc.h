@@ -41,25 +41,8 @@ DI ran(double (*f)(double), double a, double b, uint32_t n) {
 }
 
 double find_l(const Task &task) {
-    if (task.n < 2) {
-        throw std::invalid_argument("Number of points must be at least 2");
-    }
-    double step = (task.x.getUp() - task.x.getDown()) / (task.n - 1);
-
-    double x0 = task.x.getDown();
-    double y0 = task.f_pi({x0}).getMid();
-    double max_val = std::abs(y0);
-
-    for (uint32_t i = 1; i < task.n; ++i) {
-        double x = task.x.getDown() + i * step;
-        double y = task.f_pi({x}).getMid();
-
-        if (std::abs(y) > max_val) {
-            max_val = y;
-        }
-    }
-
-    return max_val;
+    DI d = task.f_pi(task.x);
+    return std::max(std::abs(d.getDown()), std::abs(d.getUp()));
 }
 
 DI estimate_f_B1(const Task &task) {
@@ -71,57 +54,68 @@ DI estimate_f_B2(const Task &task) {
 }
 
 DI estimate_f_B3(const Task &task) {
-    std::vector<DI> numbers = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
-    std::vector<double> ms = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
+    std::vector<double> ms = { task.x.getDown(), task.x.getMid(), task.x.getUp() };
 
-    std::for_each(numbers.begin(), numbers.end(), [&](DI &m) {
-        printAll("x - Mi", (task.x - m));
-        printAll("f'(x)", task.f_pi(task.x), "x: ", task.x);
-        printAll("f'(x)*f(x-m)", task.f_pi(task.x) * (task.x - m));
-        m = task.f(m.getMid()) + task.f_pi(task.x) * (task.x - m);
-        printAll("interval for Mi", m);
-        printAll("");
-    });
+    DI FpX = task.f_pi(task.x);
 
-    DI min_number = numbers.front();
-    double min_m = ms.front();
+    // F3(X; m) = f(m) + F'(X) * (X - m)
+    auto eval_for_m = [&](double m) -> DI {
+        return task.f(m) + FpX * (task.x - DI(m));
+    };
 
-    for (size_t i = 0; i < numbers.size(); i++) {
-        if (numbers[i].getWidth() < min_number.getWidth()) {
-            min_number = numbers[i];
-            min_m = ms[i];
+    DI best = eval_for_m(ms[0]);
+    double best_m = ms[0];
+    for (size_t i = 1; i < ms.size(); ++i) {
+        double m = ms[i];
+        DI cur = eval_for_m(m);
+        if (cur.getWidth() < best.getWidth()) {
+            best = cur;
+            best_m = m;
         }
     }
 
-    printAll("m:", min_m);
-    return min_number;
+#if VERBOSE
+    printAll("B3 best center m =", best_m);
+#endif
+    return best;
 }
 
-DI estimate_f_B4(const Task &task) {
-    std::vector<DI> numbers = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
-    std::vector<double> ms = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
 
-    printAll(ms.front(), ms.back());
 
-    std::for_each(numbers.begin(), numbers.end(), [&](DI &m) {
-        m = task.f_i(m) + (task.f_i(task.x) - task.f_i(m));
-//                / (task.x - m) * (task.x - m);
-        printAll("interval for x - Mi", (task.x - m));
-    });
+static DI B4_for_center(const Task& task, double m) {
+    DI X = task.x;
+    double a = X.getDown(), b = X.getUp();
+    DI Xm = DI(m);
 
-    DI min_number = numbers.front();
-    double min_m = ms.front();
+    DI XL(a, m), XR(m, b);
+    DI S  = hull(task.f_pi(XL), task.f_pi(XR));
 
-    for (size_t i = 0; i < numbers.size(); i++) {
-        if (numbers[i].getWidth() < min_number.getWidth()) {
-            min_number = numbers[i];
-            min_m = ms[i];
+    return task.f(m) + S * (X - Xm);
+}
+
+DI estimate_f_B4(const Task& task) {
+    const int N = 11;
+    DI X = task.x;
+    double a = X.getDown(), b = X.getUp();
+    double h = (b - a) / (N - 1);
+
+    DI best = B4_for_center(task, a);
+    double best_m = a;
+
+    for (int i = 1; i < N; ++i) {
+        double m = a + i * h;
+        DI cur = B4_for_center(task, m);
+        if (cur.getWidth() < best.getWidth()) {
+            best = cur;
+            best_m = m;
         }
     }
-
-    printAll("m:", min_m);
-    return min_number;
+#if VERBOSE
+    printAll("B4 best center m =", best_m);
+#endif
+    return best;
 }
+
 
 DI estimate_f_B5(const Task &task) {
     return DI(0);
