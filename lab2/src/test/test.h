@@ -63,7 +63,7 @@ void test_task(const Task &task) {
     std::cout << "L*rad(X) - rad(F(X)) = " << right_B3 - left_B3 << std::endl;
     std::cout << "rad(F(X)) <= L*rad(X) == 1? " << (left_B3 <= right_B3) << std::endl;
     std::cout << "inaccuracy = " << estimate_value_B3.getWidth()/2 << std::endl;
-//fixme big value
+
 
     //B4
     std::cin>>dummy;
