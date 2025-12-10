@@ -1,3 +1,5 @@
+// interval.h
+
 #pragma once
 
 #include <iostream>
@@ -25,7 +27,7 @@ public:
     }
 
     bool operator!=(const Interval<T> &rhs) const {
-        return *this != rhs;
+        return !(down == rhs.down && up == rhs.up);
     }
 
     friend std::ostream &operator<<(std::ostream &os, const Interval &interval) {
@@ -86,9 +88,10 @@ public:
         }
     }
 
-    friend Interval pow_i(const Interval<T> &I, unsigned const int n) {
-        Interval<T> res = I;
-        for (unsigned int i = 0; i < n; i++) {
+    friend Interval pow_i(const Interval<T> &I, unsigned int n) {
+        if (n == 0) return Interval<T>(static_cast<T>(1));
+        Interval<T> res(static_cast<T>(1));
+        for (unsigned int i = 0; i < n; ++i) {
             res = res * I;
         }
         return res;
@@ -108,6 +111,20 @@ public:
         } else {
             return up / down;
         }
+    }
+
+    [[nodiscard]] bool isEmpty() const {
+        return down > up;
+    }
+
+    friend Interval hull(const Interval &a, const Interval &b) {
+        if (a.isEmpty()) {
+            return b;
+        }
+        if (b.isEmpty()) {
+            return a;
+        }
+        return {std::min(a.getDown(), b.getDown()), std::max(a.getUp(), b.getUp())};
     }
 
     friend T dist(const Interval<T> &lhs, const Interval<T> &rhs) {
