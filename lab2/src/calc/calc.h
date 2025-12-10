@@ -54,11 +54,10 @@ DI estimate_f_B2(const Task &task) {
 }
 
 DI estimate_f_B3(const Task &task) {
-    std::vector<double> ms = { task.x.getDown(), task.x.getMid(), task.x.getUp() };
+    std::vector<double> ms = {task.x.getDown(), task.x.getMid(), task.x.getUp()};
 
     DI FpX = task.f_pi(task.x);
 
-    // F3(X; m) = f(m) + F'(X) * (X - m)
     auto eval_for_m = [&](double m) -> DI {
         return task.f(m) + FpX * (task.x - DI(m));
     };
@@ -81,19 +80,18 @@ DI estimate_f_B3(const Task &task) {
 }
 
 
-
-static DI B4_for_center(const Task& task, double m) {
+static DI B4_for_center(const Task &task, double m) {
     DI X = task.x;
     double a = X.getDown(), b = X.getUp();
     DI Xm = DI(m);
 
     DI XL(a, m), XR(m, b);
-    DI S  = hull(task.f_pi(XL), task.f_pi(XR));
+    DI S = hull(task.f_pi(XL), task.f_pi(XR));
 
     return task.f(m) + S * (X - Xm);
 }
 
-DI estimate_f_B4(const Task& task) {
+DI estimate_f_B4(const Task &task) {
     const int N = 11;
     DI X = task.x;
     double a = X.getDown(), b = X.getUp();
@@ -116,7 +114,41 @@ DI estimate_f_B4(const Task& task) {
     return best;
 }
 
+static DI mean_value_form(const Task &task, double c) {
+    DI FpX = task.f_pi(task.x);
+    return task.f(c) + FpX * (task.x - DI(c));
+}
 
 DI estimate_f_B5(const Task &task) {
-    return DI(0);
+    DI X = task.x;
+    double m = X.getMid();
+    double r = X.getRad();
+
+    DI FpX = task.f_pi(X);
+    double p = cut(FpX.getMid() / FpX.getRad(), DI(-1.0, 1.0));
+
+    double c_down = m - p * r;
+    double c_up = m + p * r;
+
+    DI I_down = mean_value_form(task, c_down);
+    DI I_up = mean_value_form(task, c_up);
+    DI I = intersect(I_down, I_up);
+
+#if VERBOSE
+    printAll("B5 p =", p);
+    printAll("B5 c_down =", c_down, " c_up =", c_up);
+    printAll("B5 fmv(c_down) =", I_down);
+    printAll("B5 fmv(c_up)   =", I_up);
+    printAll("B5 intersect   =", I);
+#endif
+
+    // Робастная защита: если пересечение пустое (численные эффекты) — вернём hull
+    if (I.isEmpty()) {
+        DI H = hull(I_down, I_up);
+#if VERBOSE
+        printAll("B5 intersection empty, fallback hull =", H);
+#endif
+        return H;
+    }
+    return I;
 }
