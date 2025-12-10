@@ -5,7 +5,7 @@
 #include "../tech.h"
 
 void graph_f(const Task &task) {
-    size_t n = 100;
+    size_t n = task.n;
     DVector x(n), y_f_linear(n), y_f_width(n);
     vectorFillXValues(x, task.x.getDown(), task.x.getUp(), n);
     vectorFillFValues(y_f_linear, task.x.getDown(), task.x.getUp(), n, task.f);
@@ -87,11 +87,11 @@ static DI B4_for_center(const Task& task, double m) {
 
     DI XL(a, m), XR(m, b);
 
-    DI SL = task.f_pi(XL); // ⊂ f'(XL)
-    DI SR = task.f_pi(XR); // ⊂ f'(XR)
+    DI SL = task.f_pi(XL);
+    DI SR = task.f_pi(XR);
 
-    DI left  = task.f(m) + SL * (XL - Xm); // (XL - m) ≤ 0
-    DI right = task.f(m) + SR * (XR - Xm); // (XR - m) ≥ 0
+    DI left  = task.f(m) + SL * (XL - Xm);
+    DI right = task.f(m) + SR * (XR - Xm);
     return hull(left, right);
 }
 
@@ -147,7 +147,6 @@ DI estimate_f_B5(const Task &task) {
     printAll("B5 intersect   =", I);
 #endif
 
-    // Робастная защита: если пересечение пустое (численные эффекты) — вернём hull
     if (I.isEmpty()) {
         DI H = hull(I_down, I_up);
 #if VERBOSE
