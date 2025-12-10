@@ -127,6 +127,12 @@ public:
         return {std::min(a.getDown(), b.getDown()), std::max(a.getUp(), b.getUp())};
     }
 
+    friend Interval intersect(const Interval &a, const Interval &b) {
+        T d = std::max(a.getDown(), b.getDown());
+        T u = std::min(a.getUp(), b.getUp());
+        return Interval(d, u);
+    }
+
     friend T dist(const Interval<T> &lhs, const Interval<T> &rhs) {
         return std::max(std::abs(lhs.down - rhs.down), std::abs(lhs.up - rhs.up));
     }
