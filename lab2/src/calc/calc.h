@@ -80,16 +80,21 @@ DI estimate_f_B3(const Task &task) {
 }
 
 
-static DI B4_for_center(const Task &task, double m) {
+static DI B4_for_center(const Task& task, double m) {
     DI X = task.x;
     double a = X.getDown(), b = X.getUp();
     DI Xm = DI(m);
 
     DI XL(a, m), XR(m, b);
-    DI S = hull(task.f_pi(XL), task.f_pi(XR));
 
-    return task.f(m) + S * (X - Xm);
+    DI SL = task.f_pi(XL); // ⊂ f'(XL)
+    DI SR = task.f_pi(XR); // ⊂ f'(XR)
+
+    DI left  = task.f(m) + SL * (XL - Xm); // (XL - m) ≤ 0
+    DI right = task.f(m) + SR * (XR - Xm); // (XR - m) ≥ 0
+    return hull(left, right);
 }
+
 
 DI estimate_f_B4(const Task &task) {
     const int N = 11;
