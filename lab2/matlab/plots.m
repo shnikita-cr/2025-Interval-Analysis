@@ -6,4 +6,4 @@ plot(x_h,y_f_linear, '-');
 set(gca, 'XAxisLocation', 'origin')
 grid on
 hold on
-legend('y\_f\_linear')
+legend('y\_f')
