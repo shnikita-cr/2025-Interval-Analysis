@@ -1,13 +1,18 @@
 cmake_minimum_required(VERSION 3.25)
-project(lab2)
+project(lab3)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(lab2
+add_executable(lab3
         main.cpp
         main.h
         tech.h
         interval/interval.h
         task/task.h
         test/test.h
-        test/test_intervals.h secondary/tech.h calc/calc.h)
+        test/test_intervals.h
+        secondary/tech.h
+        calc/calc.h
+        "secondary/matrix creating.h"
+        secondary/amatrix/amatrix.cpp
+        "equations/equation solving.h")
