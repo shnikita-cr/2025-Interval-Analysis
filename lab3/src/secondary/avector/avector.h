@@ -36,7 +36,9 @@ public:
     //info
     std::size_t getDim() const { return dim; }
     T norm(long int p = 2) const;
-    bool isSameDimensions(const AVector &other) const {return (dim == other.dim);}
+
+    template<class K>
+    bool isSameDimensions(const AVector<K> &other) const {return (dim == other.getDim());}
 
     //io
     friend void operator>>(std::istream &in, AVector<T> &av) {
@@ -55,7 +57,7 @@ public:
             out.precision(AVECTOR_PRECISION);
             out << std::fixed << av.values[i] << "\t";
         }
-        out<<std::endl;
+//        out<<std::endl;
         return out;
     }
 
