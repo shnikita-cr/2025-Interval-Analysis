@@ -80,6 +80,11 @@ public:
         return std::max(std::abs(up), std::abs(down));
     }
 
+
+    friend T abs(const Interval<T> &I) {
+        return std::max(std::abs(I.getUp()), std::abs(I.getDown()));
+    }
+
     T magn() const {
         if (this->contains(0)) {
             return 0;

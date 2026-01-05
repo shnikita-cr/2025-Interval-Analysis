@@ -41,7 +41,7 @@ double tol(const AVector<double> &x, const DIAM &A, const DIAV &b) {
     size_t m = b.getDim();
     double min = 0;
     for (size_t i = 0; i < m; i++) {
-        auto val = b[i].getRad() - std::abs(b[i].getMid() - (A[i], x));
+        auto val = b[i].getRad() - abs(b[i].getMid() - (A[i], x));
         if (val < min) {
             min = val;
         }
