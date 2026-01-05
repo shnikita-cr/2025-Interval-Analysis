@@ -23,7 +23,7 @@ void test_task(const Task &task, int i) {
     std::cout << "================" << " task: " << i << " end   ============" << std::endl;
 }
 
-bool check_grid(const Task &task, DGridResult &result) {
+bool check_grid(const Task &task) {
     // Создание 2D сетки
     std::vector<Interval<double>> bounds = {
             Interval<double>(0.0, 1.0),  // X ∈ [0, 1]
@@ -32,20 +32,21 @@ bool check_grid(const Task &task, DGridResult &result) {
 
     DGrid grid(bounds);
 
+
     // Функция для вычисления
-    auto my_function = [&](const AVector<double> &x) {
-        return tol(x, task.A, task.b);
+    auto my_function = [&](const AVector<double> &x) -> double {
+        return x.norm(1);
+//        return tol(x, task.A, task.b);
     };
 
-    // Вычисление на сетке 101x201
-    result = evaluate_grid(grid, my_function);
+    DGridResult result;
 
-    // Сохранение в файл
+    result = evaluate_grid(grid, my_function, 2);
 
     result.saveFile("../../data/results.txt");
 
-    double mx = result.getMax().getX(),
-            my = result.getMax().getY();
+    AVector<double> mx = result.getMax().getX();
+    double my = result.getMax().getY();
 
     std::cout << "maximum:"
               << "x: " << mx
