@@ -45,7 +45,8 @@ public:
         }
     }
     friend std::ostream &operator<<(std::ostream &out, const AVector<T> &av) {
-        out << "vector " << av.name << ":" << std::endl;
+        if (AVECTOR_VERBOSE)
+            out << "vector " << av.name << ":" << std::endl;
         for (std::size_t i = 0; i < av.dim; i++) {
             if (AVECTOR_VERBOSE) {
                 out << "V[" << i << "] ";
@@ -79,6 +80,9 @@ public:
 
     // (u,v)
     T operator,(const AVector<T> &other) const;
+
+    template<class V>
+    T operator,(const AVector<V> &other) const;
 
     //cast
     explicit operator std::vector<T>() const{

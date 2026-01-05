@@ -33,8 +33,7 @@ void find_gen_tol(const Task &task, const std::string &basicString) {
 }
 
 
-
-double tol(const DIAV &x, const DIAM &A, const DIAV &b) {
+double tol(const AVector<double> &x, const DIAM &A, const DIAV &b) {
     if (!(A.getRows() == b.getDim() && A.getCols() == x.getDim())) {
         printAll("Wrong shape for tol(x,A,B)!");
         return -1;
@@ -42,7 +41,7 @@ double tol(const DIAV &x, const DIAM &A, const DIAV &b) {
     size_t m = b.getDim();
     double min = 0;
     for (size_t i = 0; i < m; i++) {
-        auto val = b[i].getRad() - std::abs(b[i].getMid() - (A[i], x).getMid());
+        auto val = b[i].getRad() - std::abs(b[i].getMid() - (A[i], x));
         if (val < min) {
             min = val;
         }

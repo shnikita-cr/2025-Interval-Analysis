@@ -43,45 +43,37 @@ DIAV b3{{2.75, 3.15},
 #include <cstddef>
 
 struct Task {
-    DIAM As;                    // Интервальная матрица системы
-    DIAV bs;                    // Интервальный вектор правой части
-    size_t grid_resolution;     // Количество точек по каждой координате (одинаковое)
+    DIAM A;                    // Интервальная матрица системы
+    DIAV b;                    // Интервальный вектор правой части
+    size_t n;                  // Количество точек по каждой координате (одинаковое)
 
     // Конструктор с разрешением сетки
     Task(const DIAM &as, const DIAV &bs, size_t resolution = 100)
-            : As(as), bs(bs), grid_resolution(resolution) {
+            : A(as), b(bs), n(resolution) {
         validate();
     }
 
     // Валидация задачи
     void validate() const {
-        if (As.getRows() != bs.getDim()) {
+        if (A.getRows() != b.getDim()) {
             throw std::invalid_argument("Matrix rows must equal vector dimension");
         }
-        if (As.getCols() != 2) {
-            throw std::invalid_argument("Matrix must have 2 columns for 2D grid");
-        }
-        if (grid_resolution < 2) {
+        if (n < 2) {
             throw std::invalid_argument("Grid resolution must be at least 2");
         }
     }
 
-    // Получить количество точек по X и Y (одинаковое)
-    size_t getGridPointsX() const { return grid_resolution; }
-
-    size_t getGridPointsY() const { return grid_resolution; }
-
     // Общее количество точек в сетке
     size_t getTotalGridPoints() const {
-        return grid_resolution * grid_resolution;
+        return std::size_t(std::pow(n, b.getDim()));
     }
 
     // Печать информации о задаче
     void printInfo() const {
         std::cout << "Task Info:\n";
-        std::cout << "  Matrix A: " << As.getRows() << "x" << As.getCols() << "\n";
-        std::cout << "  Vector b: " << bs.getDim() << "\n";
-        std::cout << "  Grid resolution: " << grid_resolution << "x" << grid_resolution << "\n";
+        std::cout << "  Matrix A: " << A.getRows() << "x" << A.getCols() << "\n";
+        std::cout << "  Vector b: " << b.getDim() << "\n";
+        std::cout << "  Grid resolution: " << n << "x" << n << "\n";
         std::cout << "  Total points: " << getTotalGridPoints() << "\n";
     }
 };

@@ -231,4 +231,16 @@ T AVector<T>::operator,(const AVector &other) const {
     } else throw std::length_error("AVector (u,v): wrong dimensions");
 }
 
+template<typename T>
+template<typename V>
+T AVector<T>::operator,(const AVector<V> &other) const {
+    if (isSameDimensions(other)) {
+        T d = 0;
+        for (std::size_t i = 0; i < dim; i++) {
+            d += values[i] * other[i];
+        }
+        return d;
+    } else throw std::length_error("AVector (u,v): wrong dimensions");
+}
+
 #endif
