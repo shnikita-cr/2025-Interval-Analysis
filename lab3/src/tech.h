@@ -72,7 +72,7 @@ struct DGridResult {
                                         return a.getY() < b.getY();
                                     });
 
-        if (max != points.begin()) {
+        if (max != points.end()) {
             return *max;
         }
         throw std::runtime_error("DGridResult empty in getMax()");
