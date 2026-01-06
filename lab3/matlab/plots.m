@@ -1,5 +1,11 @@
 % Загрузка данных из файла
-data = load('../data/results.txt');
+% data = load('../data/1/check_tolerance_set.txt');
+data = load('../data/1/no_cor_tol.txt');
+
+mx = load('../data/1/no_cor_max.txt');
+mx_x = mx(:,1);
+mx_y = mx(:,2);
+mx_f = mx(:,3);
 
 % Разделение данных на столбцы
 x = data(:, 1);
@@ -35,6 +41,9 @@ title('2D Color Plot - PCOLOR');
 xlabel('x');
 ylabel('y');
 colormap(parula);
+hold on;
+plot(mx_x, mx_y, 'kx', 'MarkerSize', 14, 'LineWidth', 2);  % all points in the file
+
 
 % ========== ГРАФИК 2: 3D SCATTER ==========
 figure(2);
@@ -47,22 +56,6 @@ zlabel('f(x,y)');
 grid on;
 colormap(parula);
 
-% % ========== ГРАФИК 3: 2D SCATTER ==========
-% figure(3);
-% scatter(x, y, 100, f, 'filled', 's');
-% colorbar;
-% title('2D Scatter Plot with Color Markers');
-% xlabel('x');
-% ylabel('y');
-% colormap(jet);
-
-% % Расположим все графики на экране
-% for i = 1:3
-%     figure(i);
-%     set(gcf, 'Position', [100+(i-1)*350, 100, 350, 350]);
-% end
-
 % Сохранение графиков 
 % saveas(figure(1), 'pcolor_plot.png');
 % saveas(figure(2), '3d_scatter.png');
-% saveas(figure(3), '2d_scatter.png');

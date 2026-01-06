@@ -7,13 +7,16 @@ struct Task {
     DIAV b;                    // Интервальный вектор правой части
     size_t n;                  // Количество точек по каждой координате (одинаковое)
     std::vector<Interval<double>> bounds;
+    int id;
 
     // Конструктор с разрешением сетки
-    Task(const DIAM &as, const DIAV &bs, std::vector<Interval<double>> bounds = {}, size_t resolution = 100) : A(as),
-                                                                                                               b(bs),
-                                                                                                               n(resolution),
-                                                                                                               bounds(std::move(
-                                                                                                                       bounds)) {
+    Task(const DIAM &as, const DIAV &bs, std::vector<Interval<double>> bounds = {}, int id = 1, size_t resolution = 100)
+            : A(as),
+              b(bs),
+              n(resolution),
+              bounds(std::move(
+                      bounds)),
+              id(id) {
         validate();
     }
 
