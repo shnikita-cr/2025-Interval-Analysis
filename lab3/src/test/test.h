@@ -43,7 +43,7 @@ bool check_grid(const Task &task) {
 
     result = evaluate_grid(grid, my_function, 2);
 
-    result.saveFile("../../data/results.txt");
+    result.saveFile("../data/results.txt");
 
     AVector<double> mx = result.getMax().getX();
     double my = result.getMax().getY();
