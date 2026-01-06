@@ -15,4 +15,4 @@ add_executable(lab3
         src/calc/calc.h
         "src/secondary/matrix creating.h"
         src/secondary/amatrix/amatrix.cpp
-        "src/equations/equation solving.h")
+        "src/equations/equation solving.h" src/logger.h)

@@ -3,27 +3,27 @@
 #include "../task/task.h"
 #include "../calc/calc.h"
 
-void tol_helper(const Task &task, const std::string &suffix_name) {
-    find_argmax_tol(task, suffix_name);
-    find_gen_tol(task, suffix_name);
-    graph_tol(task, suffix_name);
-}
-
 void test_task(const Task &task, int i) {
-    std::cout << "================" << " task: " << i << " start ============" << std::endl;
+    flogger.log_framed("task", i, "start");
+    flogger.level++;
     // A
     bool is_empty = check_is_empty_tolerance_set(task, std::to_string(i));
     if (!is_empty) {
+        flogger.log("tolerance set is NOT empty");
         tol_helper(task, "before_cor_task_" + std::to_string(i));
     } else {
+        flogger.log("tolerance set IS empty");
         correct_b(task, std::to_string(i));
         correct_a(task, std::to_string(i));
         correct_ab(task, std::to_string(i));
     }
-    std::cout << "================" << " task: " << i << " end   ============" << std::endl;
+    flogger.level--;
+    flogger.log_framed("task", i, "end");
 }
 
 bool check_grid(const Task &task) {
+    flogger.log_framed("check_grid", "start");
+    flogger.level++;
     // Создание 2D сетки
     std::vector<Interval<double>> bounds = {
             Interval<double>(0.0, 1.0),  // X ∈ [0, 1]
@@ -41,7 +41,7 @@ bool check_grid(const Task &task) {
 
     DGridResult result;
 
-    result = evaluate_grid(grid, my_function, 2);
+    result = evaluate_grid(grid, my_function, task.n);
 
     result.saveFile("../data/results.txt");
 
@@ -52,5 +52,7 @@ bool check_grid(const Task &task) {
               << "x: " << mx
               << "y: " << my << std::endl;
 
+    flogger.level--;
+    flogger.log_framed("check_grid", "end");
     return my > 0;
 }

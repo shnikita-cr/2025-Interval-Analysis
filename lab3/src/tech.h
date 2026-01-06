@@ -81,7 +81,7 @@ struct DGridResult {
 
 
 DGridResult
-evaluate_grid(const DGrid &grid, const std::function<double(AVector<double>)> &func, int points_per_dim = 2) {
+evaluate_grid(const DGrid &grid, const std::function<double(AVector<double>)> &func, size_t points_per_dim = 2) {
     const auto &bounds = grid.getBounds();
     size_t n = bounds.size();
 
