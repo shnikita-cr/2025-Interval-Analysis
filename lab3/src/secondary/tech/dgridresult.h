@@ -7,8 +7,8 @@
 #include "point.h"
 
 struct DGridResult {
-    std::vector<Point < AVector<double>, double>>
-    points;
+    std::vector<Point<AVector<double>, double>>
+            points;
 
     friend std::ostream &operator<<(std::ostream &os, const DGridResult &result) {
         for (const auto &point: result.points) {

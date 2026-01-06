@@ -170,5 +170,5 @@ void matrix_make_ldr(AMatrix<double> &A,
 
 
 AVector<double> matrix_make_slae(AMatrix<double> A, AVector<double> x) {
-   return A * x;
+    return A * x;
 }
