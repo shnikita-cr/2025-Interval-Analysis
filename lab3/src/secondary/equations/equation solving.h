@@ -11,7 +11,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include "../main.h"
+#include "../../main.h"
 
 #define TARGET_DATA "iter"
 //#define TARGET_DATA "flaw"

@@ -1,9 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "../interval/interval.h"
-#include "../task/task.h"
-#include "../secondary/tech.h"
+#include "../names.h"
 
 void test_intervals() {
     DI a = {-2, -1}, b = {3, 4}, c = {3}, d = {-5, 1}, e = {-12, -8};

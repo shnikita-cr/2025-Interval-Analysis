@@ -1,5 +1,3 @@
-// interval.h
-
 #pragma once
 
 #include <iostream>
@@ -7,7 +5,7 @@
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
-#include "../main.h"
+#include "../../main.h"
 
 const int INTERVAL_PRECISION = PRECISION, INTERVAL_MAX_ELEMENT_WIDTH = INTERVAL_PRECISION + 5;
 

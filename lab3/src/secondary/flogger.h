@@ -1,0 +1,4 @@
+#include "logger.h"
+
+static auto logFile = std::ofstream("../log/log.txt");
+static Logger flogger(logFile);

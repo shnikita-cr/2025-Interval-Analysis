@@ -6,7 +6,6 @@
 #include <iomanip>
 #include <utility>
 #include "../avector/avector.h"
-#include "../../interval/interval.h"
 
 #include "../../main.h"
 

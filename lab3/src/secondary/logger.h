@@ -28,7 +28,3 @@ public:
         output << " ==========" << std::endl;
     }
 };
-
-
-auto logFile = std::ofstream("../log/log.txt");
-Logger flogger(logFile);
