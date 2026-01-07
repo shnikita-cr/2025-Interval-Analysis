@@ -3,6 +3,7 @@
 #include "../secondary/flogger.h"
 #include "../secondary/tech/dgrid.h"
 #include "../secondary/tech/evaluate_grid.h"
+#include <limits>
 
 double tol(const AVector<double> &x, const DIAM &A, const DIAV &b) {
     if (!(A.getRows() == b.getDim() && A.getCols() == x.getDim())) {
@@ -10,9 +11,9 @@ double tol(const AVector<double> &x, const DIAM &A, const DIAV &b) {
         return -1;
     }
     size_t m = b.getDim();
-    double min = 0;
+    double min = std::numeric_limits<double>::max();
     for (size_t i = 0; i < m; i++) {
-        auto val = b[i].getRad() - abs(b[i].getMid() - (A[i], x));
+        auto val = b[i].getRad() - (b[i].getMid() - (A[i], x)).abs();
         if (val < min) {
             min = val;
         }
@@ -35,69 +36,52 @@ bool check_is_empty_tolerance_set(const Task &task, const std::string &suffix_na
 
     DGridResult result;
     result = evaluate_grid(grid, my_function, task.n);
-    Point point = result.getMax();
-    result.saveFile("../data/" + std::to_string(task.id) + "/" + suffix_name + "_tolerance_set.txt");
+    Point maxPoint = result.getMax();
+    result.saveFile("../data/" + std::to_string(task.id) + "/" + suffix_name + "_tolS" + ".txt");
     flogger.level--;
     flogger.log_framed("check_is_empty_tolerance_set", "end");
-    return point.getY() == 0;
+    return maxPoint.getY() == 0;
 }
 
-void correct_b(const Task &task, const std::string &suffix_name) {
+void correct_b(const Task &task, const std::string &suffix_name, double mx) {
     flogger.log_framed("correct_b", "start");
     flogger.level++;
-    tol_helper(task, "after_cor_task_b ");
+
+    DIAV ext(task.b.getDim(), DI(-1, 1));
+    DIAV b = task.b;
+    ext = ext * (mx + 2);
+    b = b - ext;
+    Task modifiedTask(task.A, b, task.bounds, task.id, task.n);
+
+    tol_helper(modifiedTask, suffix_name, false);
+
     flogger.level--;
     flogger.log_framed("correct_b", "end");
 }
 
-void correct_a(const Task &task, const std::string &suffix_name) {
+void correct_a(const Task &task, const std::string &suffix_name, double mx) {
     flogger.log_framed("correct_a", "start");
     flogger.level++;
-    tol_helper(task, "after_cor_task_a ");
+
+
+    tol_helper(task, suffix_name, true);
+
     flogger.level--;
     flogger.log_framed("correct_a", "end");
 }
 
-void correct_ab(const Task &task, const std::string &suffix_name) {
+void correct_ab(const Task &task, const std::string &suffix_name, double mx) {
     flogger.log_framed("correct_ab", "start");
     flogger.level++;
-    tol_helper(task, "after_cor_task_ab ");
+
+
+    tol_helper(task, suffix_name, true);
+
     flogger.level--;
     flogger.log_framed("correct_ab", "end");
 }
 
-void graph_tol(const Task &task, const std::string &suffix_name) {
-    flogger.log_framed("graph_tol", "start");
-    flogger.level++;
-    flogger.level--;
-    flogger.log_framed("graph_tol", "end");
-}
-
-void graph_tol_task(const Task &task, const std::string &suffix_name) {
-    flogger.log_framed("graph_tol_task", "start");
-    flogger.level++;
-    flogger.level--;
-    flogger.log_framed("graph_tol_task", "end");
-}
-
-void find_argmax_tol(const Task &task, const std::string &suffix_name) {
-    flogger.log_framed("find_argmax_tol", "start");
-    flogger.level++;
-
-    auto result = check_grid(task);
-
-    flogger.level--;
-    flogger.log_framed("find_argmax_tol", "end");
-}
-
-void find_gen_tol(const Task &task, const std::string &suffix_name) {
-    flogger.log_framed("find_gen_tol", "start");
-    flogger.level++;
-    flogger.level--;
-    flogger.log_framed("find_gen_tol", "end");
-}
-
-void tol_helper(const Task &task, const std::string &suffix_name) {
+double tol_helper(const Task &task, const std::string &suffix_name, bool positiveTol) {
     flogger.log_framed("tol_helper", "start");
     flogger.log_framed("tol_helper", suffix_name);
     flogger.level++;
@@ -105,20 +89,26 @@ void tol_helper(const Task &task, const std::string &suffix_name) {
     auto bounds = task.bounds;
     DGrid grid(bounds);
     auto my_function = [&](const AVector<double> &x) -> double {
-        return tol(x, task.A, task.b);
-//        return std::max(0.0, tol(x, task.A, task.b));
+        if (positiveTol)
+            return std::max(0.0, tol(x, task.A, task.b));
+        else
+            return tol(x, task.A, task.b);
     };
     DGridResult result;
     result = evaluate_grid(grid, my_function, task.n);
-    result.saveFile("../data/" + std::to_string(task.id) + "/" + suffix_name + "_tol.txt");
+    result.saveFile("../data/" + std::to_string(task.id) + "/" + suffix_name + "_tolF_val" + ".txt");
 
+    // findGen Tol todo
+
+    //find argMax Tol A1
     auto mx = result.getMax();
     flogger.log("max: ", mx);
-    std::ofstream max_val_file("../data/" + std::to_string(task.id) + "/" + suffix_name + "_max.txt");
+    std::ofstream max_val_file("../data/" + std::to_string(task.id) + "/" + suffix_name + "_tolF_max" + ".txt");
     max_val_file << mx << std::endl;
 
     flogger.level--;
     flogger.log_framed("tol_helper", "end");
+    return mx.getY();
 }
 
 DGridResult check_grid(const Task &task) {
