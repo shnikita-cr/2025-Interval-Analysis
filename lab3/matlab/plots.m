@@ -1,8 +1,20 @@
 % «‡„ÛÁÍ‡ ‰‡ÌÌ˚ı ËÁ Ù‡ÈÎ‡
-% data = load('../data/1/check_tolerance_set.txt');
-data = load('../data/1/no_cor_tol.txt');
+folderId = 1;
+% data = load(['../data/', num2str(folderId), '/_init_tolS.txt']);
 
-mx = load('../data/1/no_cor_max.txt');
+% data = load(['../data/', num2str(folderId), '/before_cor_tolF_val.txt']);
+% mx = load(['../data/', num2str(folderId), '/before_cor_tolF_max.txt']);
+
+data = load(['../data/', num2str(folderId), '/cb__tolF_val.txt']);
+mx = load(['../data/', num2str(folderId), '/cb__tolF_max.txt']);
+% 
+% data = load(['../data/', num2str(folderId), '/cA__tolF_max.txt']);
+% mx = load(['../data/', num2str(folderId), '/cA__tolF_max.txt']);
+% 
+% data = load(['../data/', num2str(folderId), '/cAb_tolF_val.txt']);
+% mx = load(['../data/', num2str(folderId), '/cAb_tolF_max.txt']);
+
+
 mx_x = mx(:,1);
 mx_y = mx(:,2);
 mx_f = mx(:,3);
@@ -33,7 +45,7 @@ for i = 1:length(x_unique)
 end
 
 % ========== √–¿‘»  1: PCOLOR ==========
-figure(1);
+figure;
 pcolor(X, Y, Z);
 shading interp;
 colorbar;
@@ -42,11 +54,14 @@ xlabel('x');
 ylabel('y');
 colormap(parula);
 hold on;
+mask = Z >= 0;
 plot(mx_x, mx_y, 'kx', 'MarkerSize', 14, 'LineWidth', 2);  % all points in the file
 
+[C, h_contour] = contourf(X, Y, mask, [0.5, 0.5]);
+set(h_contour, 'FaceColor', 'none', 'EdgeColor', 'r', 'LineWidth', 2);
 
 % ========== √–¿‘»  2: 3D SCATTER ==========
-figure(2);
+figure;
 scatter3(x, y, f, 50, f, 'filled');
 colorbar;
 title('3D Scatter Plot');
