@@ -29,3 +29,9 @@ void test_intervals() {
     std::cout << (a * b) / b << std::endl;
 
 }
+
+void test_im() {
+    DV a {1,2,3,4};
+    std::cout << a.norm(-1) << std::endl;
+}
+

@@ -14,7 +14,7 @@ void test_task(const Task &task) {
         tol_helper(task, "no_cor");
     } else {
         //B
-        double mx = tol_helper(task, "before_cor");
+        DP mx = tol_helper(task, "before_cor");
         flogger.log("tolerance set IS empty");
         correct_b(task, "cb_", mx);
         correct_a(task, "cA_", mx);

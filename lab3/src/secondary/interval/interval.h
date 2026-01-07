@@ -29,6 +29,7 @@ public:
             down = right.down;
             up = right.up;
         }
+        return *this;
     }
 
     bool operator==(const Interval<T> &rhs) const {
@@ -115,6 +116,12 @@ public:
     void sortEnds() {
         down = std::min(down, up);
         up = std::max(down, up);
+    }
+
+    void scale(T factor) {
+        T mid = getMid(), rad = getRad();
+        down = mid - rad * factor;
+        up = mid + rad * factor;
     }
 
     T hi() {
@@ -222,6 +229,11 @@ public:
 
     friend Interval operator-(const Interval<T> &l, const Interval<T> &r) {
         return Interval(l.down - r.up, l.up - r.down);
+    }
+
+    friend Interval operator|(const Interval<T> &l, const Interval<T> &r) {
+        //inner minus
+        return Interval(l.down - r.down, l.up - r.up);
     }
 
     friend Interval operator*(const Interval<T> &l, const T &r) {
