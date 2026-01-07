@@ -19,6 +19,18 @@ public:
 
     Interval(T _mid) : down(_mid), up(_mid) {}
 
+    Interval(const Interval &other) {
+        down = other.down;
+        up = other.up;
+    }
+
+    Interval &operator=(const Interval &right) {
+        if (this != &right) {
+            down = right.down;
+            up = right.up;
+        }
+    }
+
     bool operator==(const Interval<T> &rhs) const {
         return down == rhs.down &&
                up == rhs.up;
