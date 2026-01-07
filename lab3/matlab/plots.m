@@ -5,11 +5,11 @@ folderId = 1;
 % data = load(['../data/', num2str(folderId), '/before_cor_tolF_val.txt']);
 % mx = load(['../data/', num2str(folderId), '/before_cor_tolF_max.txt']);
 
-data = load(['../data/', num2str(folderId), '/cb__tolF_val.txt']);
-mx = load(['../data/', num2str(folderId), '/cb__tolF_max.txt']);
+% data = load(['../data/', num2str(folderId), '/cb__tolF_val.txt']);
+% mx = load(['../data/', num2str(folderId), '/cb__tolF_max.txt']);
 % 
-% data = load(['../data/', num2str(folderId), '/cA__tolF_max.txt']);
-% mx = load(['../data/', num2str(folderId), '/cA__tolF_max.txt']);
+data = load(['../data/', num2str(folderId), '/cA__tolF_val.txt']);
+mx = load(['../data/', num2str(folderId), '/cA__tolF_max.txt']);
 % 
 % data = load(['../data/', num2str(folderId), '/cAb_tolF_val.txt']);
 % mx = load(['../data/', num2str(folderId), '/cAb_tolF_max.txt']);
