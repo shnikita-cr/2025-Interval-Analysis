@@ -11,6 +11,8 @@
 #include "../secondary/tech/evaluate_grid.h"
 #include "../secondary/flogger.h"
 
+//global
+
 class LogScope {
 private:
     std::string name;
@@ -253,6 +255,8 @@ inline DIAV predictMul(const DIAV &x, double t) {
     return DIAV(out);
 }
 
+//B1
+
 inline double evalB1Add(double a, const DIAV &x, const DIAV &y) {
     flogger.debug("evalB1Add a:", a);
     const double res = jaccardSample(x + a, y);
@@ -272,7 +276,7 @@ inline DGridResult runB1AddGrid(const DIAV &x, const DIAV &y, const DI &aRange, 
     DGrid grid(std::vector<DI>{aRange});
     auto func = [&x, &y](const AVector<double> &p) -> double { return evalB1Add(p[0], x, y); };
 
-    DGridResult r = evaluate_grid(grid, func, pointsPerDim);
+    DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);
     flogger.log("gridPoints =", r.points.size());
 
     const DP best = r.getMax();
@@ -287,7 +291,7 @@ inline DGridResult runB1MulGrid(const DIAV &x, const DIAV &y, const DI &tRange, 
     DGrid grid(std::vector<DI>{tRange});
     auto func = [&x, &y](const AVector<double> &p) -> double { return evalB1Mul(p[0], x, y); };
 
-    DGridResult r = evaluate_grid(grid, func, pointsPerDim);
+    DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);
     flogger.log("gridPoints =", r.points.size());
 
     const DP best = r.getMax();
@@ -343,3 +347,61 @@ inline DI estimateIntervalByEps(const DGridResult &r, double eps) {
     flogger.log("result =", res);
     return res;
 }
+
+// B2
+
+inline double evalB2Add(double a, const DI &modeX, const DI &modeY) {
+    const DI aa(a);
+    const DI yHat = modeX + aa;
+    return yHat.jaccard(modeY);
+}
+
+inline double evalB2Mul(double t, const DI &modeX, const DI &modeY) {
+    const DI yHat = modeX * t;
+    return yHat.jaccard(modeY);
+}
+
+inline DGridResult runB2AddGrid(const DIAV &x, const DIAV &y, const DI &aRange, size_t pointsPerDim) {
+    LogScope scope("runB2AddGrid");
+
+    const DI modeX = computeMode(x);
+    const DI modeY = computeMode(y);
+
+    flogger.log("aRange =", aRange, "pointsPerDim =", pointsPerDim);
+    flogger.log("modeX =", modeX, "modeY =", modeY);
+
+    DGrid grid(std::vector<DI>{aRange});
+    auto func = [modeX, modeY](AVector<double> p) -> double {
+        return evalB2Add(p[0], modeX, modeY);
+    };
+
+    DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);
+
+    const DP best = r.getMax();
+    flogger.log("sMax =", best.getX()[0], "FMax =", best.getY());
+
+    return r;
+}
+
+inline DGridResult runB2MulGrid(const DIAV &x, const DIAV &y, const DI &tRange, size_t pointsPerDim) {
+    LogScope scope("runB2MulGrid");
+
+    const DI modeX = computeMode(x);
+    const DI modeY = computeMode(y);
+
+    flogger.log("tRange =", tRange, "pointsPerDim =", pointsPerDim);
+    flogger.log("modeX =", modeX, "modeY =", modeY);
+
+    DGrid grid(std::vector<DI>{tRange});
+    auto func = [modeX, modeY](AVector<double> p) -> double {
+        return evalB2Mul(p[0], modeX, modeY);
+    };
+
+    DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);
+
+    const DP best = r.getMax();
+    flogger.log("sMax =", best.getX()[0], "FMax =", best.getY());
+
+    return r;
+}
+
