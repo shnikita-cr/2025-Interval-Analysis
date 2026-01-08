@@ -21,4 +21,4 @@ add_executable(lab4
         src/secondary/tech/evaluate_grid.h
         src/secondary/flogger.h
         src/task/input.h
-        src/task/preprocess.h)
+        src/task/preprocess.h src/secondary/tech/evaluate_grid.cpp)

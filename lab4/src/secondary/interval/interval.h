@@ -114,8 +114,9 @@ public:
     }
 
     void sortEnds() {
-        down = std::min(down, up);
-        up = std::max(down, up);
+        T a = down, b = up;
+        down = std::min(a, b);
+        up = std::max(a, b);
     }
 
     void scale(T factor) {
@@ -167,6 +168,25 @@ public:
         else
             return x;
     }
+
+    double jaccard(const Interval<T> &rhs) const {
+        if (this->isEmpty() || rhs.isEmpty()) return 0.0;
+
+        const T interLeft = std::max(down, rhs.down);
+        const T interRight = std::min(up, rhs.up);
+        const T interLen = std::max(static_cast<T>(0), interRight - interLeft);
+
+        const T lenA = this->length();
+        const T lenB = rhs.length();
+        const T uniLen = lenA + lenB - interLen;
+
+        if (uniLen <= static_cast<T>(0)) {
+            // оба "точки" (или нулевая длина), считаем совпадение по равенству
+            return (*this == rhs) ? 1.0 : 0.0;
+        }
+        return static_cast<double>(interLen / uniLen);
+    }
+
 
     // Comparison operators
     friend bool operator>(const Interval<T> &l, const Interval<T> &r) {

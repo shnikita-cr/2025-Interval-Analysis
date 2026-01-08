@@ -1,3 +1,4 @@
+#pragma once
 #include "logger.h"
 
 //static auto logFile = std::ofstream("../log/log.txt");

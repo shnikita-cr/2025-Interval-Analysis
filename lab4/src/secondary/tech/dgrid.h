@@ -1,14 +1,16 @@
 #pragma once
 
+#include "../interval/interval.h"
+
 class DGrid {
 private:
-    std::vector <Interval<double>> bounds;
+    std::vector<Interval<double>> bounds;
 public:
-    const std::vector <Interval<double>> &getBounds() const {
+    const std::vector<Interval<double>> &getBounds() const {
         return bounds;
     }
 
 public:
-    DGrid(const std::vector <Interval<double>> &bounds) : bounds(bounds) {}
+    DGrid(const std::vector<Interval<double>> &bounds) : bounds(bounds) {}
 };
 
