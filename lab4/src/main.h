@@ -1,4 +1,4 @@
 #pragma once
 
-#define VERBOSE 1
+#define VERBOSE 0
 #define PRECISION 5
