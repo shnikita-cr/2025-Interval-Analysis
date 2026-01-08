@@ -49,11 +49,17 @@ void correct_b(const Task &task, const std::string &suffix_name, const DP &mx) {
 
     DIAV ext(task.b.getDim(), DI(-1, 1));
     DIAV b = task.b;
-    ext = ext * (mx.getY() + 2);
+    double C = mx.getY() + 2;
+    flogger.log("C coef for [-1, 1]:", C);
+    ext = ext * C;
     b = b - ext;
     Task modifiedTask(task.A, b, task.bounds, task.id, task.n);
 
-    tol_helper(modifiedTask, suffix_name, false);
+    tol_helper(modifiedTask, suffix_name, true);
+    check_is_empty_tolerance_set(modifiedTask, suffix_name);
+
+    flogger.log("A", modifiedTask.A);
+    flogger.log("b", modifiedTask.b);
 
     flogger.level--;
     flogger.log_framed("correct_b", "end");
@@ -67,11 +73,11 @@ void innerMinus(DIAM &A, DIAM &E) {
     }
 }
 
-double max(const DM &A) {
-    double mx = 0;
+double min(const DM &A) {
+    double mx = std::numeric_limits<double>::max();
     for (size_t i = 0; i < A.getRows(); i++) {
         for (size_t j = 0; j < A.getCols(); j++) {
-            if (A[i][j] > mx) {
+            if (A[i][j] < mx) {
                 mx = A[i][j];
             }
         }
@@ -87,14 +93,22 @@ double sum(const DV &A) {
     return sum;
 }
 
-DM rad(const DIAM &A) {
-    DM radA(A.getRows(), A.getCols(), 0);
-    for (size_t i = 0; i < A.getRows(); i++) {
-        for (size_t j = 0; j < A.getCols(); j++) {
-            radA[i][j] = A[i][j].getRad();
+DV rad(const DIAV &V) {
+    DV radV(V.getDim(), 0);
+    for (size_t i = 0; i < V.getDim(); i++) {
+        radV[i] = V[i].getRad();
+    }
+    return radV;
+}
+
+DM rad(const DIAM &M) {
+    DM radM(M.getRows(), M.getCols(), 0);
+    for (size_t i = 0; i < M.getRows(); i++) {
+        for (size_t j = 0; j < M.getCols(); j++) {
+            radM[i][j] = M[i][j].getRad();
         }
     }
-    return radA;
+    return radM;
 }
 
 void correct_a(const Task &task, const std::string &suffix_name, const DP &mx) {
@@ -106,7 +120,7 @@ void correct_a(const Task &task, const std::string &suffix_name, const DP &mx) {
     DIAM E(A.getRows(), A.getCols(), DI(-1, 1));
 
     Interval eI = {
-            std::abs(mx.getY()) / sum(mx.getX()), max(radA)
+            std::abs(mx.getY()) / sum(mx.getX()), min(radA)
     };
     flogger.log("e in:", eI);
     double e = eI.getUp();
@@ -115,18 +129,61 @@ void correct_a(const Task &task, const std::string &suffix_name, const DP &mx) {
     innerMinus(A, E);
     Task modifiedTask(A, task.b, task.bounds, task.id, task.n);
 
-    tol_helper(modifiedTask, suffix_name, false);
+    tol_helper(modifiedTask, suffix_name, true);
+    check_is_empty_tolerance_set(modifiedTask, suffix_name);
+
+    flogger.log("A", modifiedTask.A);
+    flogger.log("b", modifiedTask.b);
 
     flogger.level--;
     flogger.log_framed("correct_a", "end");
 }
 
-void correct_ab(const Task &task, const std::string &suffix_name, const DP& mx) {
+void correct_ab(const Task &task, const std::string &suffix_name, const DP &mx1) {
     flogger.log_framed("correct_ab", "start");
     flogger.level++;
 
+    flogger.log("max:", mx1);
 
-    tol_helper(task, suffix_name, true);
+    //from A
+    DIAM A = task.A;
+    //
+    DM radA = rad(A);
+    DIAM E(A.getRows(), A.getCols(), DI(-1, 1));
+
+    Interval eI = {
+            std::abs(mx1.getY()) / sum(mx1.getX()), min(radA)
+    };
+    flogger.log("e in:", eI);
+    double e = eI.getUp();
+    flogger.log("e =", e);
+    E = E * e;
+    innerMinus(A, E);
+
+    Task modifiedATask(A, task.b, task.bounds, task.id, task.n);
+    DP mx2 = tol_helper(modifiedATask, "ab_cor", false);
+
+    //from b
+    DIAV b = task.b;
+    //
+    DIAV ext(task.b.getDim(), DI(-1, 1));
+    double C = mx2.getY();
+    flogger.log("C coef for [-1, 1]:", C);
+    ext = ext * C;
+    b = b - ext;
+    //
+
+    flogger.log(mx2);
+
+    //
+    Task modifiedAbTask(A, b, task.bounds, task.id, task.n);
+
+
+    tol_helper(modifiedAbTask, suffix_name, true);
+    check_is_empty_tolerance_set(modifiedAbTask, suffix_name);
+
+    flogger.log("A", modifiedAbTask.A);
+    flogger.log("b", modifiedAbTask.b);
 
     flogger.level--;
     flogger.log_framed("correct_ab", "end");
