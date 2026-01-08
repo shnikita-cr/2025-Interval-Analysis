@@ -80,3 +80,36 @@ void testB2(const DIAV &X, const DIAV &Y, double eps, const DI &boundsAdd, const
     }
     flogger.log_end("testB2");
 }
+
+void testB3(const DIAV &X, const DIAV &Y, double eps, const DI &boundsAdd, const DI &boundsMul, size_t n = 201) {
+    flogger.log_start("testB3");
+    {
+        //a
+        flogger.log_start("testB3::a");
+
+        DGridResult rA = runB3AddGrid(X, Y, boundsAdd, n);
+        DP aMax = rA.getMax();
+        DI aInterval = estimateIntervalByEps(rA, eps);
+
+        savePoint(aMax, "../data/b3/add_max.txt");
+        saveInterval(aInterval, "../data/b3/add_int.txt");
+
+        rA.saveFile("../data/b3/add_val.txt");
+        flogger.log_end("testB3::a");
+    }
+    {
+        //t
+        flogger.log_start("testB3::t");
+
+        DGridResult rT = runB3MulGrid(X, Y, boundsMul, n);
+        DP tMax = rT.getMax();
+        DI tInterval = estimateIntervalByEps(rT, eps);
+
+        savePoint(tMax, "../data/b3/mul_max.txt");
+        saveInterval(tInterval, "../data/b3/mul_int.txt");
+
+        rT.saveFile("../data/b3/mul_val.txt");
+        flogger.log_end("testB3::t");
+    }
+    flogger.log_end("testB3");
+}

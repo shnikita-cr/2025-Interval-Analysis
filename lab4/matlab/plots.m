@@ -1,6 +1,6 @@
 % ====== B1: 2D plots for Add / Mul with max point ======
 
-folderId = 'b1';
+folderId = 'b3';
 ttl1 = 'F(a)';
 ttl2 = 'F(t)';
 
@@ -32,7 +32,7 @@ plot([aR aR], yl, 'k--', 'LineWidth', 1.2);
 plot(mxAdd_x, mxAdd_f, 'ko', 'MarkerSize', 8, 'LineWidth', 1.5); % black circle
 xlabel('a');
 ylabel('F(a)');
-title([folderId, 'a+X=Y: ', ttl1]);
+title([folderId, ': a+X=Y: ', ttl1]);
 hold off;
 
 % -------- FIGURE 2: MUL --------
@@ -44,5 +44,5 @@ plot([tR tR], yl, 'k--', 'LineWidth', 1.2);
 plot(mxMul_x, mxMul_f, 'ko', 'MarkerSize', 8, 'LineWidth', 1.5); % black circle
 xlabel('t');
 ylabel('F(t)');
-title([folderId, 't*X=Y: ', ttl2]);
+title([folderId, ': t*X=Y: ', ttl2]);
 hold off;

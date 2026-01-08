@@ -21,5 +21,6 @@ int main() {
     size_t n = 151;
     testB1(X, Y, 0.001, aRange, tRange, n);
     testB2(X, Y, 0.001, aRange, tRange, 1000000);
+    testB3(X, Y, 0.001, aRange, tRange, 1000000);
     return 0;
 }

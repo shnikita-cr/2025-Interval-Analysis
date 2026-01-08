@@ -405,3 +405,57 @@ inline DGridResult runB2MulGrid(const DIAV &x, const DIAV &y, const DI &tRange, 
     return r;
 }
 
+inline double evalB3Add(double a, const DI& medKX, const DI& medKY) {
+    const DI aa(a);
+    const DI yHat = medKX + aa;
+    return yHat.jaccard(medKY);
+}
+
+inline double evalB3Mul(double t, const DI& medKX, const DI& medKY) {
+    const DI yHat = medKX * t;
+    return yHat.jaccard(medKY);
+}
+
+inline DGridResult runB3AddGrid(const DIAV& x, const DIAV& y, const DI& aRange, size_t pointsPerDim) {
+    LogScope scope("runB3AddGrid");
+
+    const DI medKX = computeMedK(x);
+    const DI medKY = computeMedK(y);
+
+    flogger.log("aRange =", aRange, "pointsPerDim =", pointsPerDim);
+    flogger.log("medKX =", medKX, "medKY =", medKY);
+
+    DGrid grid(std::vector<DI>{aRange});
+    auto func = [medKX, medKY](AVector<double> p) -> double {
+        return evalB3Add(p[0], medKX, medKY);
+    };
+
+    DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);
+
+    const DP best = r.getMax();
+    flogger.log("sMax =", best.getX()[0], "FMax =", best.getY());
+
+    return r;
+}
+
+inline DGridResult runB3MulGrid(const DIAV& x, const DIAV& y, const DI& tRange, size_t pointsPerDim) {
+    LogScope scope("runB3MulGrid");
+
+    const DI medKX = computeMedK(x);
+    const DI medKY = computeMedK(y);
+
+    flogger.log("tRange =", tRange, "pointsPerDim =", pointsPerDim);
+    flogger.log("medKX =", medKX, "medKY =", medKY);
+
+    DGrid grid(std::vector<DI>{tRange});
+    auto func = [medKX, medKY](AVector<double> p) -> double {
+        return evalB3Mul(p[0], medKX, medKY);
+    };
+
+    DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);
+
+    const DP best = r.getMax();
+    flogger.log("sMax =", best.getX()[0], "FMax =", best.getY());
+
+    return r;
+}
