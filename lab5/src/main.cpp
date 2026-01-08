@@ -1,0 +1,6 @@
+#include "test/test.h"
+#include "task/task.h"
+
+int main() {
+    return 0;
+}
