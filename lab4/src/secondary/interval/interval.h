@@ -48,7 +48,7 @@ public:
     }
 
     T length() const {
-        return up - down;
+        return std::max(0.0, up - down);
     }
 
     bool contains(T x) const {
