@@ -43,7 +43,7 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const Interval &interval) {
         std::cout << std::fixed << std::setprecision(INTERVAL_PRECISION);
-        os << "interval: [" << std::setw(INTERVAL_MAX_ELEMENT_WIDTH) << interval.down << ", " << interval.up << "]";
+        os << "[" << std::setw(INTERVAL_MAX_ELEMENT_WIDTH) << interval.down << ", " << interval.up << "]";
         return os;
     }
 
