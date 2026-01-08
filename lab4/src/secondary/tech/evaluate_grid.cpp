@@ -9,7 +9,7 @@
 
 DGridResult evaluate_grid(
         const DGrid &grid,
-        const std::function<double(const AVector<double>)> &func,
+        const std::function<double(const AVector<double>&)> &func,
         size_t points_per_dim,
         bool show_progress,
         size_t progress_bar_width,
