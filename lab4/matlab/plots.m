@@ -24,7 +24,7 @@ aL = addInt(1); aR = addInt(2);
 tL = mulInt(1); tR = mulInt(2);
 
 % -------- FIGURE 1: ADD --------
-figure(1); clf;
+figure; clf;
 plot(xAdd, fAdd, 'LineWidth', 1.5); grid on; hold on;
 yl = ylim;
 plot([aL aL], yl, 'k--', 'LineWidth', 1.2);
@@ -36,7 +36,7 @@ title([folderId, 'a+X=Y: ', ttl1]);
 hold off;
 
 % -------- FIGURE 2: MUL --------
-figure(2); clf;
+figure; clf;
 plot(xMul, fMul, 'LineWidth', 1.5); grid on; hold on;
 yl = ylim;
 plot([tL tL], yl, 'k--', 'LineWidth', 1.2);
