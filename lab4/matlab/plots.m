@@ -1,6 +1,6 @@
 % ====== B1: 2D plots for Add / Mul with max point ======
 
-folderId = 'b3';
+folderId = 'b4';
 ttl1 = 'F(a)';
 ttl2 = 'F(t)';
 

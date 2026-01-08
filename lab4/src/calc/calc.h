@@ -405,18 +405,18 @@ inline DGridResult runB2MulGrid(const DIAV &x, const DIAV &y, const DI &tRange, 
     return r;
 }
 
-inline double evalB3Add(double a, const DI& medKX, const DI& medKY) {
+inline double evalB3Add(double a, const DI &medKX, const DI &medKY) {
     const DI aa(a);
     const DI yHat = medKX + aa;
     return yHat.jaccard(medKY);
 }
 
-inline double evalB3Mul(double t, const DI& medKX, const DI& medKY) {
+inline double evalB3Mul(double t, const DI &medKX, const DI &medKY) {
     const DI yHat = medKX * t;
     return yHat.jaccard(medKY);
 }
 
-inline DGridResult runB3AddGrid(const DIAV& x, const DIAV& y, const DI& aRange, size_t pointsPerDim) {
+inline DGridResult runB3AddGrid(const DIAV &x, const DIAV &y, const DI &aRange, size_t pointsPerDim) {
     LogScope scope("runB3AddGrid");
 
     const DI medKX = computeMedK(x);
@@ -438,7 +438,7 @@ inline DGridResult runB3AddGrid(const DIAV& x, const DIAV& y, const DI& aRange, 
     return r;
 }
 
-inline DGridResult runB3MulGrid(const DIAV& x, const DIAV& y, const DI& tRange, size_t pointsPerDim) {
+inline DGridResult runB3MulGrid(const DIAV &x, const DIAV &y, const DI &tRange, size_t pointsPerDim) {
     LogScope scope("runB3MulGrid");
 
     const DI medKX = computeMedK(x);
@@ -450,6 +450,62 @@ inline DGridResult runB3MulGrid(const DIAV& x, const DIAV& y, const DI& tRange, 
     DGrid grid(std::vector<DI>{tRange});
     auto func = [medKX, medKY](AVector<double> p) -> double {
         return evalB3Mul(p[0], medKX, medKY);
+    };
+
+    DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);
+
+    const DP best = r.getMax();
+    flogger.log("sMax =", best.getX()[0], "FMax =", best.getY());
+
+    return r;
+}
+
+
+inline double evalB4Add(double a, const DI &medPX, const DI &medPY) {
+    const DI aa(a);
+    const DI yHat = medPX + aa;
+    return yHat.jaccard(medPY);
+}
+
+inline double evalB4Mul(double t, const DI &medPX, const DI &medPY) {
+    const DI yHat = medPX * t;
+    return yHat.jaccard(medPY);
+}
+
+inline DGridResult runB4AddGrid(const DIAV &x, const DIAV &y, const DI &aRange, size_t pointsPerDim) {
+    LogScope scope("runB4AddGrid");
+
+    const DI medPX = computeMedP(x);
+    const DI medPY = computeMedP(y);
+
+    flogger.log("aRange =", aRange, "pointsPerDim =", pointsPerDim);
+    flogger.log("medPX =", medPX, "medPY =", medPY);
+
+    DGrid grid(std::vector<DI>{aRange});
+    auto func = [medPX, medPY](AVector<double> p) -> double {
+        return evalB4Add(p[0], medPX, medPY);
+    };
+
+    DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);
+
+    const DP best = r.getMax();
+    flogger.log("sMax =", best.getX()[0], "FMax =", best.getY());
+
+    return r;
+}
+
+inline DGridResult runB4MulGrid(const DIAV &x, const DIAV &y, const DI &tRange, size_t pointsPerDim) {
+    LogScope scope("runB4MulGrid");
+
+    const DI medPX = computeMedP(x);
+    const DI medPY = computeMedP(y);
+
+    flogger.log("tRange =", tRange, "pointsPerDim =", pointsPerDim);
+    flogger.log("medPX =", medPX, "medPY =", medPY);
+
+    DGrid grid(std::vector<DI>{tRange});
+    auto func = [medPX, medPY](AVector<double> p) -> double {
+        return evalB4Mul(p[0], medPX, medPY);
     };
 
     DGridResult r = evaluate_grid(grid, func, pointsPerDim, VERBOSE);

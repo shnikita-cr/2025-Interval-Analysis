@@ -19,8 +19,9 @@ int main() {
     DI aRange(0.0, 1.0);
     DI tRange(-2.0, 0.0);
     size_t n = 151;
-    testB1(X, Y, 0.001, aRange, tRange, n);
-    testB2(X, Y, 0.001, aRange, tRange, 1000000);
-    testB3(X, Y, 0.001, aRange, tRange, 1000000);
+//    testB1(X, Y, 0.001, aRange, tRange, n);
+//    testB2(X, Y, 0.001, aRange, tRange, 1000000);
+//    testB3(X, Y, 0.001, aRange, tRange, 1000000);
+    testB4(X, Y, 0.001, aRange, tRange, 1000000);
     return 0;
 }
