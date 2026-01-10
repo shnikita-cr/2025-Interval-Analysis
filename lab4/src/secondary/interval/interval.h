@@ -6,6 +6,7 @@
 #include <cmath>
 #include <iomanip>
 #include "../../main.h"
+#include "../flogger.h"
 
 const int INTERVAL_PRECISION = PRECISION, INTERVAL_MAX_ELEMENT_WIDTH = INTERVAL_PRECISION + 5;
 

@@ -353,6 +353,9 @@ inline DGridResult runAggGrid(const std::string &scopeName,
 
     const DP best = r.getMax();
     flogger.log("sMax =", best.getX()[0], "FMax =", best.getY());
+    flogger.debug("J()", repY.jaccard(repX + best.getX()[0]));
+    flogger.debug("modeY", repY, "modeX + a", repX + best.getX()[0]);
+
     return r;
 }
 
