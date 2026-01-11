@@ -37,7 +37,8 @@ static inline void saveTaskVisualizationData(
     saveFunctionGrid2d(f2, grid, dir + "f2_grid.txt", pointsPerDim);
     saveBoxes2d(boxes, dir + "boxes.txt");
     saveXk(boxes, dir + "x_k.txt");
-
+    saveXkLinear(boxes, dir + "x_k_iter.txt");
+    saveXkRatio(boxes, dir + "x_k_iter_ratio.txt");
     flogger.log_end("saveTaskVisualizationData");
 }
 

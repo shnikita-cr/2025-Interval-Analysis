@@ -104,7 +104,7 @@ void saveBoxes2d(const std::vector<DIAV> &boxes, const std::string &fileName) {
     std::ofstream of(fileName);
     if (!of) throw std::runtime_error("saveBoxes2d: cannot open file");
 
-    for (const auto & boxe : boxes) {
+    for (const auto &boxe: boxes) {
         writeBoxPolyline2d(of, boxe);
     }
 
@@ -112,16 +112,52 @@ void saveBoxes2d(const std::vector<DIAV> &boxes, const std::string &fileName) {
 }
 
 void saveXk(const std::vector<DIAV> &boxes, const std::string &fileName) {
-    flogger.log_start("saveBoxes2d");
+    flogger.log_start("saveXk");
     flogger.log("file =", fileName, "count =", boxes.size());
 
     std::ofstream of(fileName);
-    if (!of) throw std::runtime_error("saveBoxes2d: cannot open file");
+    if (!of) throw std::runtime_error("saveXk: cannot open file");
 
-    for (const auto & boxe : boxes) {
-        writeBoxPolyline2d(of, boxe);
+    for (const auto &boxe: boxes) {
+        of << boxe << std::endl;
     }
 
-    flogger.log_end("saveBoxes2d");
+    flogger.log_end("saveXk");
+}
+
+double aggLength(const DIAV &v) {
+    double r = 0;
+    for (size_t i = 0; i < v.getDim(); i++) {
+        r += v[i].length();
+    }
+    return r;
+}
+
+void saveXkLinear(const std::vector<DIAV> &boxes, const std::string &fileName) {
+    flogger.log_start("saveXk");
+    flogger.log("file =", fileName, "count =", boxes.size());
+
+    std::ofstream of(fileName);
+    if (!of) throw std::runtime_error("saveXk: cannot open file");
+
+    for (size_t i = 0; i < boxes.size(); i++) {
+        of << i << " " << aggLength(boxes[i]) << std::endl;
+    }
+
+    flogger.log_end("saveXk");
+}
+
+void saveXkRatio(const std::vector<DIAV> &boxes, const std::string &fileName) {
+    flogger.log_start("saveXk");
+    flogger.log("file =", fileName, "count =", boxes.size());
+
+    std::ofstream of(fileName);
+    if (!of) throw std::runtime_error("saveXk: cannot open file");
+
+    for (size_t i = 0; i < boxes.size(); i++) {
+        of << i << " " << aggLength(boxes[i]) / aggLength(boxes[0]) << std::endl;
+    }
+
+    flogger.log_end("saveXk");
 }
 
