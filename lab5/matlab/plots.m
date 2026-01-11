@@ -1,84 +1,48 @@
-% Загрузка данных из файла
-folderId = 3;
-ttl = 'Ax \subset b';
-% ttl = 'tol(x,A,b)>=0';
+% ====== B1: 2D plots for Add / Mul with max point ======
 
-% data = load(['../data/', num2str(folderId), '/_init_tolS.txt']);
+folderId = 'b4';
+ttl1 = 'F(a)';
+ttl2 = 'F(t)';
 
-% data = load(['../data/', num2str(folderId), '/before_cor_tolF_val.txt']);
-% mx = load(['../data/', num2str(folderId), '/before_cor_tolF_max.txt']);
+dataAdd = load(['../data/', folderId, '/add_val.txt']);
+dataMul = load(['../data/', folderId, '/mul_val.txt']);
+xAdd = dataAdd(:,1);
+fAdd = dataAdd(:,2);
+xMul = dataMul(:,1);
+fMul = dataMul(:,2);
 
-% data = load(['../data/', num2str(folderId), '/cb__tolS.txt']);
-% data = load(['../data/', num2str(folderId), '/cb__tolF_val.txt']);
-% mx = load(['../data/', num2str(folderId), '/cb__tolF_max.txt']);
-% 
+mxAdd   = load(['../data/', folderId, '/add_max.txt']);
+mxMul   = load(['../data/', folderId, '/mul_max.txt']);
+mxAdd_x = mxAdd(1,1);
+mxAdd_f = mxAdd(1,2);
+mxMul_x = mxMul(1,1);
+mxMul_f = mxMul(1,2);
 
-% data = load(['../data/', num2str(folderId), '/cA__tolS.txt']);
-% data = load(['../data/', num2str(folderId), '/cA__tolF_val.txt']);
-% mx = load(['../data/', num2str(folderId), '/cA__tolF_max.txt']);
-% 
-data = load(['../data/', num2str(folderId), '/cAb__tolS.txt']);
-% data = load(['../data/', num2str(folderId), '/cAb_tolF_val.txt']);
-mx = load(['../data/', num2str(folderId), '/cAb_tolF_max.txt']);
+addInt  = load(['../data/', folderId, '/add_int.txt']);  % 2 numbers: left right
+mulInt  = load(['../data/', folderId, '/mul_int.txt']);  % 2 numbers: left right
+aL = addInt(1); aR = addInt(2);
+tL = mulInt(1); tR = mulInt(2);
 
+% -------- FIGURE 1: ADD --------
+figure; clf;
+plot(xAdd, fAdd, 'LineWidth', 1.5); grid on; hold on;
+yl = ylim;
+plot([aL aL], yl, 'k--', 'LineWidth', 1.2);
+plot([aR aR], yl, 'k--', 'LineWidth', 1.2);
+plot(mxAdd_x, mxAdd_f, 'ko', 'MarkerSize', 8, 'LineWidth', 1.5); % black circle
+xlabel('a');
+ylabel('F(a)');
+title([folderId, ': a+X=Y: ', ttl1]);
+hold off;
 
-mx_x = mx(:,1);
-mx_y = mx(:,2);
-mx_f = mx(:,3);
-
-% Разделение данных на столбцы
-x = data(:, 1);
-y = data(:, 2);
-% f = max(data(:, 3),0);
-f = data(:, 3);
-
-% Определение уникальных значений x и y
-x_unique = unique(x);
-y_unique = unique(y);
-
-% Создание сетки для построения
-[X, Y] = meshgrid(x_unique, y_unique);
-
-% Преобразование данных в матрицу
-Z = zeros(length(y_unique), length(x_unique));
-
-% Заполнение матрицы Z значениями f(x,y)
-for i = 1:length(x_unique)
-    for j = 1:length(y_unique)
-        idx = find(x == x_unique(i) & y == y_unique(j));
-        if ~isempty(idx)
-            Z(j, i) = f(idx(1));
-        end
-    end
-end
-
-% ========== ГРАФИК 1: PCOLOR ==========
-figure;
-pcolor(X, Y, Z);
-shading interp;
-colorbar;
-title(ttl);
-xlabel('x_1');
-ylabel('x_2');
-colormap(parula);
-hold on;
-mask = Z >= 0;
-plot(mx_x, mx_y, 'kx', 'MarkerSize', 14, 'LineWidth', 2);  % all points in the file
-
-[C, h_contour] = contourf(X, Y, mask, [0.5, 0.5]);
-set(h_contour, 'FaceColor', 'none', 'EdgeColor', 'r', 'LineWidth', 2);
-
-% % ========== ГРАФИК 2: 3D SCATTER ==========
-% figure;
-% scatter3(x, y, f, 50, f, 'filled');
-% colorbar;
-% title('3D Scatter Plot');
-% xlabel('x');
-% ylabel('y');
-% zlabel('f(x,y)');
-% grid on;
-% colormap(parula);
-
-% Сохранение графиков 
-% saveas(figure(1), 'pcolor_plot.png');
-% saveas(figure(2), '3d_scatter.png');
+% -------- FIGURE 2: MUL --------
+figure; clf;
+plot(xMul, fMul, 'LineWidth', 1.5); grid on; hold on;
+yl = ylim;
+plot([tL tL], yl, 'k--', 'LineWidth', 1.2);
+plot([tR tR], yl, 'k--', 'LineWidth', 1.2);
+plot(mxMul_x, mxMul_f, 'ko', 'MarkerSize', 8, 'LineWidth', 1.5); % black circle
+xlabel('t');
+ylabel('F(t)');
+title([folderId, ': t*X=Y: ', ttl2]);
+hold off;
