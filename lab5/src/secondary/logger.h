@@ -79,7 +79,7 @@ public:
     template<typename... Args>
     void debug(Args... args) {
         if (VERBOSE) {
-            log("DEBUG",args...);
+            log("DEBUG", args...);
         }
     }
 };

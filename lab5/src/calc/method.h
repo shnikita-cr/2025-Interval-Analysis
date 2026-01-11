@@ -42,7 +42,7 @@ static inline bool isBoxEmpty(const DIAV &x) {
     return x[0].isEmpty() || x[1].isEmpty();
 }
 
-static inline void invert2x2(
+void invert2x2(
         double a00, double a01,
         double a10, double a11,
         double &c00, double &c01,
@@ -61,7 +61,7 @@ static inline void invert2x2(
 }
 
 template<typename TaskT>
-static inline DIAV krawczykOperator(const TaskT &task, const DIAV &x, double x_c, double y_c) {
+DIAV krawczykOperator(const TaskT &task, const DIAV &x, double x_c, double y_c) {
     flogger.log_start("krawczykOperator");
 
     if (x.getDim() != 2) {
@@ -120,7 +120,7 @@ static inline DIAV krawczykOperator(const TaskT &task, const DIAV &x, double x_c
 }
 
 template<typename TaskT>
-static inline KrawczykRunResult runKrawczyk(
+KrawczykRunResult runKrawczyk(
         const TaskT &task,
         const DIAV &xInit,
         double x_c,

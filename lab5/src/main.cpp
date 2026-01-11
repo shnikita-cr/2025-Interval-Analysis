@@ -4,17 +4,19 @@
 #include "task/taskValues.h"
 
 int main() {
-    testTask(
-            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{0, 1},
-                                                  {0, 1}})}, x_c, y_c);
+    size_t iters = 5;
+
 //    testTask(
 //            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{0, 1},
-//                                                  {0, 1}})}, x_c, y_c);
+//                                                  {0, 1}})}, x_c, y_c, iters);
+    testTask(
+            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{0.5, 1.5},
+                                                  {0.5, 1.5}})}, x_c, y_c, iters);
 //    testTask(
 //            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{-0.5, 0.5},
-//                                                  {-0.5, 0.5}})}, x_c, y_c);
+//                                                  {-0.5, 0.5}})}, x_c, y_c, iters);
 //    testTask(
 //            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{0.0, 0.8},
-//                                                  {0.0, 0.8}})}, x_c, y_c);
+//                                                  {0.0, 0.8}})}, x_c, y_c, iters);
     return 0;
 }

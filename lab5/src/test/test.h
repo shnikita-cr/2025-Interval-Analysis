@@ -5,6 +5,7 @@
 #include "../secondary/flogger.h"
 #include "../secondary/tech/evaluate_grid.h"
 #include "../secondary/print_all.h"
+#include "../calc/method.h"
 
 void saveInterval(const DI &i, const std::string &fileName) {
     std::ofstream of(fileName);
@@ -35,21 +36,21 @@ static inline void saveTaskVisualizationData(
     saveFunctionGrid2d(f1, grid, dir + "f1_grid.txt", pointsPerDim);
     saveFunctionGrid2d(f2, grid, dir + "f2_grid.txt", pointsPerDim);
     saveBoxes2d(boxes, dir + "boxes.txt");
+    saveXk(boxes, dir + "x_k.txt");
 
     flogger.log_end("saveTaskVisualizationData");
 }
 
 
-void testTask(Task task, double x_c, double y_c) {
+void testTask(Task task, double x_c, double y_c, size_t iters) {
     flogger.log_start("test");
     flogger.log("x_c:", x_c, "y_c", y_c);
 
     std::string savePath("../data/" + format(x_c, 1) + "/");
-    std::vector<DIAV> boxes{{{0, 1},   {0, 1}},
-                            {{0, 0.5}, {0, 0.5}}};
 
+    KrawczykRunResult res = runKrawczyk(task, task.dGrid.getBounds(), x_c, y_c, iters);
 
-    saveTaskVisualizationData(task.f1_d, task.f2_d, task.dGrid, savePath, boxes);
+    saveTaskVisualizationData(task.f1_d, task.f2_d, task.dGrid, savePath, res.boxes);
 
     flogger.log_end("test");
 }

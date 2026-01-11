@@ -26,7 +26,7 @@ public:
 };
 
 
-static inline void saveFunctionGrid2d(
+void saveFunctionGrid2d(
         const std::function<double(const DV &)> &f,
         const DGrid &grid,
         const std::string &fileName,
@@ -70,7 +70,7 @@ static inline void saveFunctionGrid2d(
     flogger.log_end("saveFunctionGrid2d");
 }
 
-static inline void saveFunctionGrid2d(
+void saveFunctionGrid2d(
         const std::function<double(const DV &)> &f,
         const DGrid &grid,
         const std::string &fileName,
@@ -78,7 +78,7 @@ static inline void saveFunctionGrid2d(
     saveFunctionGrid2d(f, grid, fileName, pointsPerDim, pointsPerDim);
 }
 
-static inline void writeBoxPolyline2d(std::ostream &os, const DIAV &box) {
+void writeBoxPolyline2d(std::ostream &os, const DIAV &box) {
     if (box.getDim() != 2) throw std::runtime_error("writeBoxPolyline2d: box must be 2D");
 
     const double x1L = box[0].getDown();
@@ -97,7 +97,21 @@ static inline void writeBoxPolyline2d(std::ostream &os, const DIAV &box) {
     os << "NaN NaN\n";
 }
 
-static inline void saveBoxes2d(const std::vector<DIAV> &boxes, const std::string &fileName) {
+void saveBoxes2d(const std::vector<DIAV> &boxes, const std::string &fileName) {
+    flogger.log_start("saveBoxes2d");
+    flogger.log("file =", fileName, "count =", boxes.size());
+
+    std::ofstream of(fileName);
+    if (!of) throw std::runtime_error("saveBoxes2d: cannot open file");
+
+    for (const auto & boxe : boxes) {
+        writeBoxPolyline2d(of, boxe);
+    }
+
+    flogger.log_end("saveBoxes2d");
+}
+
+void saveXk(const std::vector<DIAV> &boxes, const std::string &fileName) {
     flogger.log_start("saveBoxes2d");
     flogger.log("file =", fileName, "count =", boxes.size());
 

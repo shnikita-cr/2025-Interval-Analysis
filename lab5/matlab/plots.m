@@ -7,7 +7,7 @@
 % This script draws:
 %   - FIGURE 1: contour f1=0 + f2=0 + all boxes
 
-folderId = '0.0';                % e.g. '0.0', '0.5', '1.0', '1.2'
+folderId = '0.5';                % e.g. '0.0', '0.5', '1.0', '1.2'
 dataDir = ['../data/', folderId, '/'];
 
 % ---------- Load grids ----------
@@ -53,7 +53,7 @@ bx = boxes(:,1);
 by = boxes(:,2);
 
 % ---------- FIGURE 1: contour f1=0 and f2=0 + boxes ----------
-figure; clf; hold on; grid on;
+figure(1); clf; hold on; grid on;
 
 % Level sets
 contour(X1, X2, Z1, [0 0], 'LineWidth', 2);          % f1=0
