@@ -1,18 +1,13 @@
-% ====== Kravchik task: visualize f1=0, f2=0 and boxes X(k) ======
-% Expected files in ../data/<folderId>/ :
-%   f1_grid.txt   : columns [x1 x2 f1(x1,x2)]
-%   f2_grid.txt   : columns [x1 x2 f2(x1,x2)]
-%   boxes.txt     : columns [x1 x2], rectangles separated by NaN NaN
-%
-% This script draws:
-%   - FIGURE 1: contour f1=0 + f2=0 + all boxes
-
-folderId = '0.5';                % e.g. '0.0', '0.5', '1.0', '1.2'
+folderId = '0.0'; 
 dataDir = ['../data/', folderId, '/'];
 
 % ---------- Load grids ----------
 g1 = load([dataDir, 'f1_grid.txt']);   % x1 x2 f1
 g2 = load([dataDir, 'f2_grid.txt']);   % x1 x2 f2
+
+xi = load([dataDir, 'x_k_iter_ratio.txt']);
+iter = xi(:,1);
+x_iter = xi(:,2);
 
 x1 = g1(:,1);
 x2 = g1(:,2);
@@ -69,3 +64,15 @@ axis equal;
 hold off;
 
 saveas(gcf,['../report/images/',folderId,'/plot.png'])
+
+figure(2); clf; 
+plot(iter, x_iter, 'ko-');
+hold on; 
+grid on;
+xlabel('iteration');
+ylabel('Normalized \Sigma len(X_i)');
+title([folderId, ': Normalized \Sigma len(X_i) by iter']);
+hold off;
+
+
+saveas(gcf,['../report/images/',folderId,'/x_k_iter.png'])
