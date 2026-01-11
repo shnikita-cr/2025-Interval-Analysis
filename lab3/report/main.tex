@@ -1,0 +1,348 @@
+\documentclass[40pt,a4paper]{article}
+
+\usepackage{graphicx, amsmath, amsfonts, listings}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,english]{babel}
+\usepackage{geometry, tocloft}
+\usepackage{hyperref}
+
+\geometry{a4paper,left=15mm,top=15mm}
+
+\graphicspath{{./images/}}
+
+% Переименование оглавления
+\addto\captionsenglish{\renewcommand{\contentsname}{Содержание}}
+
+% Настройки межстрочных отступов в оглавлении
+\setlength\cftparskip{1.2pt}
+\setlength\cftbeforesecskip{1.3pt}
+\setlength\cftaftertoctitleskip{2pt}
+
+% Добавление точки после номера раздела
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\makeatother
+
+% Добавление точек в оглавление
+\let\savenumberline\numberline
+\def\numberline#1{\savenumberline{#1.}}
+
+\newcommand{\ran}{\mathrm{ran}}
+\newcommand{\rad}{\mathrm{rad}}
+\newcommand{\dist}{\mathrm{dist}}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+
+{\LARGE\bfseries Министерство образования и науки Российской Федерации}
+
+\vspace{0.5cm}
+
+{\LARGE\bfseries Санкт-Петербургский политехнический университет Петра Великого
+}
+
+\vspace{1.5cm}
+
+{\Large Отчет по лабораторной работе №3 по дисциплине}
+{\Large “Интервальный анализ”}
+
+\vspace{1cm}
+
+{\Large \textit{b-, A-, Ab-коррекция в линейной задаче о допусках}}
+
+\vspace{16cm}
+
+\begin{center}
+\begin{tabular}{ r l c }
+ Выполнил                       \\ 
+ студент гр. 5030102/20201 & Н.А.Морщинин \\  
+ преподаватель             & А.Н.Баженов
+\end{tabular}
+\end{center}
+\vfill
+
+\end{titlepage}
+
+\thispagestyle{empty} 
+
+\newpage
+
+\tableofcontents
+
+\newpage
+\section{Введение}
+\subsection{Постановка задачи}
+
+Дан набор интервальных систем линейных уравнений: 
+$\bold{A_i} x = \bold{b_i}$,
+$x = (x_1, x_2); i=\overline{1,3}$
+
+Для каждой системы $\bold{A_i} x = \bold{b_i}$ необходимо:
+
+\begin{enumerate}
+    \item Проверить непустоту допуского множества ИСЛАУ. В случае, если допусковое множество непусто:
+    \begin{itemize}
+    	\item Найти argmax Tol и образующие допускового функционала.
+    	\item Построить график функционала $Tol(x)$, отметить точку максимума.
+    	\item Построить графики допускового множества ИСЛАУ на плоскости, отметить точку максимума.
+    \end{itemize}
+    
+    \item Если допусковое множество пусто, необходимо скорректировать систему каждым из описанных ниже способов: 
+    \begin{itemize}
+    	\item С помощью коррекции правой части ИСЛАУ - b-коррекция
+    	\item С помощью коррекции левой части ИСЛАУ - А-коррекция
+    	\item С помощью комбинации предыдущих методов с одновременным изменением правой и левой части ИСЛАУ - Ab-коррекция
+    \end{itemize}
+    \item Сравнить влияние разных видов коррекции на форму и положение допускового множества. Определить, какой вид коррекции является наименее искажением исходных данных при достижении разрешимости.
+\end{enumerate}
+
+
+\newpage
+
+\subsection{Условия задачи}
+
+$x \in X = [-10,10] \times [-10,10]$
+
+\subsubsection{Система 1}
+
+\[
+A = \begin{pmatrix}
+	[0.65, 1.25] & [0.70, 1.30] \\
+	[0.75, 1.35] & [0.70, 1.30] \\
+\end{pmatrix}, b = \begin{pmatrix}
+	[2.75, 3.15] \\
+	[2.85, 3.25] \\
+\end{pmatrix}
+\]
+
+\subsubsection{Система 2}
+
+\[
+A = \begin{pmatrix}
+	[0.65, 1.25] & [0.70  1.30] \\
+	[0.75, 1.35] & [0.70, 1.30] \\
+	[0.80, 1.40] & [0.70, 1.30] \\
+\end{pmatrix}, b = \begin{pmatrix}
+	[2.75, 3.15] \\
+	[2.85, 3.25] \\
+	[2.90, 3.30] \\
+\end{pmatrix}
+\]
+
+\subsubsection{Система 3}
+
+\[
+A = \begin{pmatrix}
+	[ 0.65, 1.25] & [0.70  1.30] \\
+	[ 0.75, 1.35] & [0.70, 1.30] \\
+	[ 0.80, 1.40] & [0.70, 1.30] \\
+	[-0.30, 0.30] & [0.70, 1.30] \\
+\end{pmatrix}, b = \begin{pmatrix}
+	[2.75, 3.15] \\
+	[2.85, 3.25] \\
+	[2.90, 3.30] \\
+	[1.80, 2.20] \\
+\end{pmatrix}
+\]
+
+\subsection{Предварительный анализ}
+
+Все системы имеют пустое допусковое множество без коррекции, это можно наблюдать на графиках ниже для каждой из систем. Изображен график $z_i = f(x_1, x_2) = (A_ix \subset b_i)$
+
+\paragraph{Система 1 без коррекции}
+\paragraph{}
+\includegraphics[scale=0.25]{images/1/0_s.png}
+\includegraphics[scale=0.25]{images/1/0_f.png}
+\paragraph{Система 2 без коррекции}
+\paragraph{}
+\includegraphics[scale=0.25]{images/2/0_s.png}
+\includegraphics[scale=0.25]{images/2/0_f.png}
+\paragraph{Система 3 без коррекции}
+\paragraph{}
+\includegraphics[scale=0.25]{images/3/0_s.png}
+\includegraphics[scale=0.25]{images/3/0_f.png}
+
+
+\newpage
+
+\section{Теория}
+
+\subsection{b-коррекция}
+
+Метод состоит в том, чтобы увеличить радиус компонент правой части, внеся добавку с коэффициентом C:
+$ b = b + C * I$, где 
+
+$ C = |maxTol(x,A,b)| + \epsilon$,
+
+$I = ([-1,1], \dots,[-1,1])^T$,
+
+$\epsilon$ задается пользователем для увеличения допускового множества. Здесь $\epsilon = 2$.
+
+\textit{[Источник: Интервальный анализ. Основы теории и учебные примеры. А.Н.Баженов, 2020, стр. 50, пример 6.36]}
+
+\subsection{A-коррекция}
+
+Метод состоит в том, чтобы уменьшить радиус компонент матрицы, при этом оставив центры интервалов без изменений. В данном случае будем использовать единый коэффициент для всех строк матрицы.
+
+$e \leftarrow E= [|\frac{maxTol(x,A,b)}{\sum{argmaxTol(x,A,b)}}|, min(rad(A))] $
+
+Интервал $E$ получается из решения системы неравенств для A-коррекции.
+
+В качестве $e$ возьмем правую границу интервала.
+
+$I$ - матрица из интервалов вида $[-1,1]$ соответствующего $A$ размера.
+
+$ A = A \ominus I*e $ 
+
+\textit{[Источник: Интервальный анализ. Основы теории и учебные примеры. А.Н.Баженов, 2020, стр. 52, пример 6.38]}
+
+\subsection{Ab-коррекция}
+
+Ab-коррекция проводится последовательным изменением левой и правой частей по формулам, указанным в разделах выше. При этом поправка $\epsilon=0$.
+
+\textit{[Источник: Комбинированный метод коррекции интервальных систем линейных алгебраических уравнений. А.Н.Баженов, А.Ю.Тельнова, 2022, стр. 974, выражения (18-20)]}
+
+\section{Реализация}
+
+Численная реализация была проведена по формулам, приведенным выше. 
+
+\subsection{Алгоритм}
+
+\begin{enumerate}
+	\item Проверить пустоту допускового множества $(\exists x \in X: (\bold{A}x \subset \bold{b}))$
+	\item Если не пусто:
+	\begin{itemize}
+		\item Вычислить значения допускового множества для $x \in X$
+		\item Вычислить значения функционала $tol_{x \in X}(x,A,b)$, найти $max$, $argmax$ и образующие.
+	\end{itemize}
+	
+	\item Если пусто:
+	\begin{itemize}
+		\item Провести b- коррекцию. Выполнить пункт 2. 
+		\item Провести A- коррекцию. Выполнить пункт 2.
+		\item Провести Ab- коррекцию. Выполнить пункт 2.
+	\end{itemize}
+\end{enumerate}
+
+\textit{Код доступен по ссылке:} \url{https://github.com/shnikita-cr/2025-Interval-Analysis/tree/lab3/lab3}
+
+\newpage
+
+\section{Выводы}
+
+\subsection{Результаты}
+
+\subsubsection{Система 1}
+
+\begin{tabular}{||c | c | c||} 
+	\hline
+	Тип коррекции  & $argmaxTol_{x \in X}(x,A,b)$ & $maxTol_{x \in X}(x,A,b)$\\ [0.5ex] 
+	\hline\hline
+	- &  (0.954 2.060) & -0.721  \\ 
+	\hline
+	b &  (0.954 2.060) & 0.556  \\ 
+	\hline
+	A &  (0.954 2.060) & 0.183  \\ 
+	\hline
+	Ab & (0.954 2.060) & 0.365  \\ 
+	\hline
+\end{tabular}
+
+\subsubsection*{b коррекция}
+
+\includegraphics[scale=0.4]{images/1/b_f.png}
+\includegraphics[scale=0.4]{images/1/b_s.png}
+
+\subsubsection*{A коррекция}
+
+\includegraphics[scale=0.4]{images/1/a_f.png}
+\includegraphics[scale=0.4]{images/1/a_s.png}
+
+\subsubsection*{Ab коррекция}
+
+\includegraphics[scale=0.4]{images/1/ab_f.png}
+\includegraphics[scale=0.4]{images/1/ab_s.png}
+
+\newpage
+
+\subsubsection{Система 2}
+\begin{tabular}{||c | c | c||} 
+	\hline
+	Тип коррекции  & $argmaxTol_{x \in X}(x,A,b)$ & $maxTol_{x \in X}(x,A,b)$\\ [0.5ex] 
+	\hline\hline
+	- &  (0.954 2.060) & -0.722  \\ 
+	\hline
+	b &  (0.954 2.060) & 0.556  \\ 
+	\hline
+	A &  (0.954 2.060) & 0.182  \\ 
+	\hline
+	Ab & (0.954 2.060) & 0.365  \\ 
+	\hline
+\end{tabular}
+
+\subsubsection*{b коррекция}
+
+\includegraphics[scale=0.4]{images/1/b_f.png}
+\includegraphics[scale=0.4]{images/1/b_s.png}
+
+\subsubsection*{A коррекция}
+
+\includegraphics[scale=0.4]{images/1/a_f.png}
+\includegraphics[scale=0.4]{images/1/a_s.png}
+
+\subsubsection*{Ab коррекция}
+
+\includegraphics[scale=0.4]{images/1/ab_f.png}
+\includegraphics[scale=0.4]{images/1/ab_s.png}
+
+\newpage
+
+\subsubsection{Система 3}
+\begin{tabular}{||c | c | c||} 
+	\hline
+	Тип коррекции  & $argmaxTol_{x \in X}(x,A,b)$ & $maxTol_{x \in X}(x,A,b)$\\ [0.5ex] 
+	\hline\hline
+	- &  (1.055 1.959) & -0.744  \\ 
+	\hline
+	b &  (1.055 1.959) & 0.510  \\ 
+	\hline
+	A &  (1.055 1.959) & 0.159  \\ 
+	\hline
+	Ab & (1.055 1.959) & 0.319  \\ 
+	\hline
+\end{tabular}
+
+\subsubsection*{b коррекция}
+
+\includegraphics[scale=0.4]{images/3/b_f.png}
+\includegraphics[scale=0.4]{images/3/b_s.png}
+
+\subsubsection*{A коррекция}
+
+\includegraphics[scale=0.4]{images/3/a_f.png}
+\includegraphics[scale=0.4]{images/3/a_s.png}
+
+\subsubsection*{Ab коррекция}
+
+\includegraphics[scale=0.4]{images/3/ab_f.png}
+\includegraphics[scale=0.4]{images/3/ab_s.png}
+
+\newpage
+
+\subsection{Интерпретация результата}
+
+А коррекция является минимальным искажением исходных данных задачи, все типы коррекций не смещают допусковое множество, а также точку максимума функционала $tol$. Заметим следующее:
+
+\begin{itemize}
+  \item \textbf{b-}коррекция расширяет допусковое множество в направлении главной диагонали $x_1=x_2$.
+  \item \textbf{A-}коррекция расширяет допусковое множество в направлении побочной диагонали $x_1 = -x+2$, причем вытянутость сильно заметна и для допускового множества, и для графика $tol(x,A,b)$.
+  \item \textbf{Ab-}коррекция также расширяет допусковое множество в направлении побочной диагонали $x_1 = -x+2$. Вытянутость сильно заметна только при условии систем 1 и 2. Из-за особенностей условия системы 3 (центрированный интервал в последней строке матрицы и вектора) допусковое множество получается довольно небольшим и не имеет заметной вытянутости, как в случае систем 1 и 2.
+\end{itemize}
+
+\end{document}
+
+
+    
