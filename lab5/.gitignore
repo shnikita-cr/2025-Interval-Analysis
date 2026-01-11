@@ -1,9 +1,0 @@
-data
-log
-*.aux
-*.bbl
-*.log
-*.toc
-*.txss2
-*.blg
-*.synctex.gz
