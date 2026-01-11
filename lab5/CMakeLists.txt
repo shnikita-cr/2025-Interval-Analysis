@@ -16,10 +16,10 @@ add_executable(lab5
         src/secondary/amatrix/amatrix.cpp
         "src/secondary/equations/equation solving.h"
         src/secondary/logger.h
-        src/calc/calc.cpp src/secondary/tech/dgridresult.h
+        src/secondary/tech/dgridresult.h
         src/secondary/tech/dgrid.h
         src/secondary/tech/point.h
         src/secondary/tech/evaluate_grid.h
         src/secondary/tech/evaluate_grid.cpp
         src/secondary/flogger.h
-        src/task/taskValues.h)
+        src/task/taskFuncs.h src/calc/method.h)
