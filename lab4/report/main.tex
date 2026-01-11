@@ -1,0 +1,316 @@
+\documentclass[40pt,a4paper]{article}
+
+\usepackage{graphicx, amsmath, amsfonts, listings}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,english]{babel}
+\usepackage{geometry, tocloft}
+\usepackage{hyperref}
+
+\geometry{a4paper,left=15mm,top=15mm}
+
+\graphicspath{{./images/}}
+
+% Переименование оглавления
+\addto\captionsenglish{\renewcommand{\contentsname}{Содержание}}
+
+% Настройки межстрочных отступов в оглавлении
+\setlength\cftparskip{1.2pt}
+\setlength\cftbeforesecskip{1.3pt}
+\setlength\cftaftertoctitleskip{2pt}
+
+% Добавление точки после номера раздела
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\makeatother
+
+% Добавление точек в оглавление
+\let\savenumberline\numberline
+\def\numberline#1{\savenumberline{#1.}}
+
+\newcommand{\ran}{\mathrm{ran}}
+\newcommand{\rad}{\mathrm{rad}}
+\newcommand{\dist}{\mathrm{dist}}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+
+{\LARGE\bfseries Министерство образования и науки Российской Федерации}
+
+\vspace{0.5cm}
+
+{\LARGE\bfseries Санкт-Петербургский политехнический университет Петра Великого
+}
+
+\vspace{1.5cm}
+
+{\Large Отчет по лабораторной работе №4 по дисциплине}
+{\Large “Интервальный анализ”}
+
+\vspace{1cm}
+
+{\Large \textit{Вычисление интервальных описательных статистик}}
+
+\vspace{16cm}
+
+\begin{center}
+\begin{tabular}{ r l c }
+ Выполнил                       \\ 
+ студент гр. 5030102/20201 & Н.А.Морщинин \\  
+ преподаватель             & А.Н.Баженов
+\end{tabular}
+\end{center}
+\vfill
+
+\end{titlepage}
+
+\thispagestyle{empty} 
+
+\newpage
+
+\tableofcontents
+
+\newpage
+\section{Введение}
+\subsection{Постановка задачи}
+
+
+Даны два входных файла данных диагностики томпсоновского рассеяния.
+
+
+Связь кодов данных и Вольт для преобразования единиц измерения выражается следующим образом: 
+
+
+$V = Code / 16384 - 0.5$
+
+
+По данным из входных файлов необходимо реализовать следующее:
+
+\begin{enumerate}
+    \item Пусть $X$ и $Y$ - интервальные выборки вида $\bold{X} = \{x_i\}$, $\bold{Y} = \{y_i\}$
+    
+    
+    Извлечь $X$ и $Y$ из данных входных файлов, задав $rad x = rad y = \frac{1}{2^N}, N = 14$
+    
+    \item Пусть зависимость $Y$ и $X$ задается следующими выражениями:
+    
+    $a + \bold{X} = \bold{Y}$
+    
+    
+    $t * \bold{X} = \bold{Y}$
+    
+    Вычислить точечные и интервальные оценки констант $a$, $t$, в уравнениях с помощью некоторого функционала $F$, задавшись уровнем точности $\epsilon$:
+    
+    $\hat{s} = argmax\ F(s, \bold{X}, \bold{Y})$, где $s \in \{a,t\}$
+    
+    
+    Для функционала $F$ рассмотреть следующие случаи:
+    
+    \begin{enumerate}
+    	\item $F(s, \bold{X}, \bold{Y}) = Ji(s,\bold{X}, \bold{Y})$
+    	\item $F(s, \bold{X}, \bold{Y}) = Ji(s,mode\bold{X}, mode\bold{Y})$
+    	\item $F(s, \bold{X}, \bold{Y}) = Ji(s,med_K\bold{X}, med_K\bold{Y})$
+    	\item $F(s, \bold{X}, \bold{Y}) = Ji(s,med_P\bold{X}, med_P\bold{Y})$
+    \end{enumerate}
+    
+    где Ji - коэффициент Жаккара, mode - интервальная мода, $med_K,\ med_P$ - интервальные медианы Крейновича и Пролубникова.
+    
+    \item Для каждого пункта a-d предоставить графики $F(s)$, отметить $s_{max}$.
+    \item Сравнить полученные результаты.
+\end{enumerate}
+
+\subsection{Условия задачи}
+
+\subsubsection{Исходные данные}
+
+Данные представлены в файлах: 
+
+\begin{itemize}
+	\item \textit{-0.205\_lvl\_side\_a\_fast\_data.bin}
+	\item \textit{0.227\_lvl\_side\_a\_fast\_data.bin}
+\end{itemize}
+
+\subsubsection{Предобработка данных}
+
+Для извлечения данных читался каждый файл и записывались значения каждого канала с точки каждого кадра в структуру данных, затем преобразованы по формуле для получения значений в Вольтах.
+
+
+
+Вторым шагом данные каждого файла "выпрямлялись": значения с каналов точек кадров $s$ помещались в единый массив данных $v$, таким образом, что 
+
+
+$v[i]=s[F][P][C]$. 
+
+Таким образом были получены точечные вектора $Xd$, $Yd$.
+
+Вектор брусы были получены из точечных добавлением неопределенности радиуса $r$:
+
+$V[i] = [v[i]-r, v[i]+r]$
+
+Таким образом были получены вектор брусы $X$, $Y$.
+
+\newpage
+
+
+
+
+\section{Теория}
+
+\subsection{Коэффициент Жаккара для интервалов}
+
+Для двух интервалов $A=[\underline{a},\overline{a}]$, $B=[\underline{b},\overline{b}]$:
+\[
+|A|=\max(0,\overline{a}-\underline{a}),\quad
+|B|=\max(0,\overline{b}-\underline{b}),
+\]
+\[
+|A\cap B|=\max\!\bigl(0,\min(\overline{a},\overline{b})-\max(\underline{a},\underline{b})\bigr),
+\]
+\[
+J(A,B)=\frac{|A\cap B|}{|A|+|B|-|A\cap B|}.
+\]
+
+Для двух интервальных векторов одинаковой размерности:
+\[
+J(\mathbf{A},\mathbf{B})=\frac{\sum_{i=1}^{n} |A_i\cap B_i|}{\sum_{i=1}^{n} \bigl(|A_i|+|B_i|-|A_i\cap B_i|\bigr)}.
+\]
+
+\subsection{B1}
+
+\[
+F(a,\mathbf{X},\mathbf{Y}) = J(\mathbf{X}+a,\mathbf{Y}),\qquad
+F(t,\mathbf{X},\mathbf{Y}) = J(t\cdot\mathbf{X},\mathbf{Y}).
+\]
+
+\subsection{B2}
+
+Вводятся репрезентативные интервалы:
+\[
+\mathrm{mode}\,\mathbf{X},\qquad \mathrm{mode}\,\mathbf{Y}.
+\]
+Тогда
+\[
+F(a,\mathbf{X},\mathbf{Y}) = J(\mathrm{mode}\,\mathbf{X}+a,\mathrm{mode}\,\mathbf{Y}),\qquad
+F(t,\mathbf{X},\mathbf{Y}) = J(t\cdot \mathrm{mode}\,\mathbf{X},\mathrm{mode}\,\mathbf{Y}).
+\]
+
+\subsection{B3}
+
+Репрезентативные интервалы берутся как медианы Крейновича:
+\[
+\mathrm{med}_K\,\mathbf{X} = \bigl[\mathrm{med}(\underline{x_i}),\ \mathrm{med}(\overline{x_i})\bigr],\qquad
+\mathrm{med}_K\,\mathbf{Y} = \bigl[\mathrm{med}(\underline{y_i}),\ \mathrm{med}(\overline{y_i})\bigr].
+\]
+Тогда
+\[
+F(a,\mathbf{X},\mathbf{Y}) = J(\mathrm{med}_K\,\mathbf{X}+a,\mathrm{med}_K\,\mathbf{Y}),\qquad
+F(t,\mathbf{X},\mathbf{Y}) = J(t\cdot \mathrm{med}_K\,\mathbf{X},\mathrm{med}_K\,\mathbf{Y}).
+\]
+
+\subsection{B4}
+
+Репрезентативные интервалы берутся как медианы Пролубникова:
+\[
+\mathrm{med}_P\,\mathbf{X},\qquad \mathrm{med}_P\,\mathbf{Y},
+\]
+где $\mathrm{med}_P$ выбирается по порядку центров интервалов (при равенстве центров — по ширине), и для чётного числа элементов берётся объединяющая оболочка двух центральных интервалов.
+Тогда
+\[
+F(a,\mathbf{X},\mathbf{Y}) = J(\mathrm{med}_P\,\mathbf{X}+a,\mathrm{med}_P\,\mathbf{Y}),\qquad
+F(t,\mathbf{X},\mathbf{Y}) = J(t\cdot \mathrm{med}_P\,\mathbf{X},\mathrm{med}_P\,\mathbf{Y}).
+\]
+
+\subsection{Вычисление интервальной моды}
+
+Рассматриваются все границы интервалов $\{\underline{x_i},\overline{x_i}\}$ как события начала/конца покрытия.
+По отсортированным событиям строится число активных интервалов $c(z)$.
+Результат:
+\[
+\mathrm{mode}\,\mathbf{X} = \arg\max\limits_{z}\ c(z),
+\]
+при этом возвращается отрезок максимального покрытия (если он ненулевой), иначе точка максимального покрытия.
+
+\section{Реализация}
+
+Для поиска $\hat{s}$ параметр $s$ перебирался на равномерной сетке на заданном интервале значений.
+Для каждой точки сетки вычислялось значение $F(s)$, после чего выбиралось
+\[
+\hat{s}=\arg\max F(s).
+\]
+
+\subsection{Интервальная оценка параметра по $\epsilon$}
+
+Пусть $F_{\max}=\max F(s)$ на сетке. Тогда интервальная оценка строилась как
+\[
+S_\epsilon=\Bigl[\min\{s:\ F(s)\ge F_{\max}-\epsilon\},\ \max\{s:\ F(s)\ge F_{\max}-\epsilon\}\Bigr].
+\]
+
+\subsection{Особенности}
+
+Для B2--B4 сначала вычислялись репрезентативные интервалы ($\mathrm{mode}$, $\mathrm{med}_K$, $\mathrm{med}_P$), после чего функционал считался только по ним, что уменьшает вычислительную сложность по сравнению с B1.
+
+
+\textit{Код доступен по ссылке:} \url{https://github.com/shnikita-cr/2025-Interval-Analysis/tree/lab4/lab4}
+
+\newpage
+
+\section{Выводы}
+
+\subsection{Результаты}
+
+Вычисления проводились при $\epsilon = 0.001$.
+
+$a \in [0.0, 1.0]$,
+
+Поиск в пределах $t \in [-2.0, 0.0]$
+
+\begin{tabular}{||c | c | c | c | c | c | c ||} 
+	\hline
+	Функционал  & $F(a)$ & $argmax\ F(a)$ & Интервал $a$ & $F(t)$ & $argmax\ F(t)$ &  Интервал $t$ \\ 
+	\hline\hline
+	$Ji(s,\bold{X}, \bold{Y})$ & $0.00210$ & 0.34000 & [0.33333, 0.35333] & $0.00208$ & -1.01333 & [-1.10667, -0.94667]\\
+	\hline
+	$Ji(s,mode\bold{X}, mode\bold{Y})$ & $0.99310$ & 0.34310 & [0.34310, 0.34310] & $0.99443$ & -1.00107 & [-1.00107, -1.00107]\\
+	\hline
+	$Ji(s,med_K\bold{X}, med_K\bold{Y})$ & $0.99212$ & 0.34353 & [0.34353, 0.34353] & $0.98554$ & -1.01467 & [-1.01468, -1.01467]\\
+	\hline
+	$Ji(s,med_P\bold{X}, med_P\bold{Y})$ & $0.99212$ & 0.34353 & [0.34353, 0.34353] & $0.98554$ & -1.01467 & [-1.01468, -1.01467]\\
+	\hline
+\end{tabular}
+
+
+\subsection*{Вычисления для функционала $F_1$}
+
+\includegraphics[scale=0.5]{images/b1/as.png}
+\includegraphics[scale=0.5]{images/b1/am.png}
+
+\subsection*{Вычисления для функционала $F_2$}
+
+\includegraphics[scale=0.5]{images/b2/as.png}
+\includegraphics[scale=0.5]{images/b2/am.png}
+
+\subsection*{Вычисления для функционала $F_3$}
+
+\includegraphics[scale=0.5]{images/b3/as.png}
+\includegraphics[scale=0.5]{images/b3/am.png}
+
+\subsection*{Вычисления для функционала $F_4$}
+
+\includegraphics[scale=0.5]{images/b4/as.png}
+\includegraphics[scale=0.5]{images/b4/am.png}
+
+
+\subsection{Интерпретация результата}
+\begin{itemize}
+	\item $Ji(s,\bold{X}, \bold{Y})$ — оценка по всей выборке; максимум малый, интервалы параметров шире.
+	\item $Ji(s,mode\bold{X}, mode\bold{Y})$ — оценка по модам; максимум близок к 1, интервалы параметров почти точечные.
+	\item $Ji(s,med_K\bold{X}, med_K\bold{Y})$ — оценка по медианам Крейновича; близко к B2, но даёт немного иные $argmax$.
+	\item $Ji(s,med_P\bold{X}, med_P\bold{Y})$ — оценка по медианам Пролубникова; в этих данных совпала с B3.
+\end{itemize}
+
+\end{document}
+
+
+    

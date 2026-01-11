@@ -179,6 +179,15 @@ AVector<K> operator*(K k, AVector<K> &v) {
 }
 
 template<typename T>
+AVector<T> AVector<T>::operator+(T other) const {
+    AVector<T> copy = *this;
+    for (size_t i = 0; i < dim; i++) {
+        copy.values[i] += other;
+    }
+    return copy;
+}
+
+template<typename T>
 AVector<T> AVector<T>::operator+(AVector &other) const {
     if (isSameDimensions(other)) {
         AVector av(dim);
@@ -241,6 +250,20 @@ T AVector<T>::operator,(const AVector<V> &other) const {
         }
         return d;
     } else throw std::length_error("AVector (u,v): wrong dimensions");
+}
+
+template<typename T>
+void AVector<T>::apply(const std::unary_function<T, T> &f) {
+    for (std::size_t i = 0; i < dim; i++) {
+        values[i] = f(values[i]);
+    }
+}
+
+template<typename T>
+void AVector<T>::agg(const std::unary_function<T, std::vector<T>> &f) {
+    for (std::size_t i = 0; i < dim; i++) {
+        values[i] = f(values[i]);
+    }
 }
 
 #endif

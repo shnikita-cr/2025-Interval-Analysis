@@ -73,6 +73,7 @@ public:
     template<typename K>
     friend AVector<K> operator*(K k, AVector<K>& v);
 
+    AVector<T> operator+(T other) const;
 
     //u+v
     AVector<T> operator+(AVector<T> &other) const;
@@ -90,6 +91,9 @@ public:
     explicit operator std::vector<T>() const{
         return values;
     }
+
+    void apply(const std::unary_function<T,T> &f);
+    void agg(const std::unary_function<T,std::vector<T>>& f);
 };
 
 #include "avector.cpp"

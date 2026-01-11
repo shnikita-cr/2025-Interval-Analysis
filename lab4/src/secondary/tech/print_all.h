@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ostream>
+#include <iostream>
 
 template<typename... Args>
 void printAll(Args... args) {
