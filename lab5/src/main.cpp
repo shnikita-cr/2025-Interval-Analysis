@@ -1,21 +1,20 @@
 #include "task/task.h"
-#include "task/taskValues.h"
+#include "task/taskFuncs.h"
 #include "test/test.h"
-
+#include "task/taskValues.h"
 
 int main() {
-    double y_c = 0;
     testTask(
-            Task{f1, f2, DGrid({{0, 1},
-                                {0, 1}})}, 0.0, y_c);
-    testTask(
-            Task{f1, f2, DGrid({{0, 1},
-                                {0, 1}})}, 0.5, y_c);
-    testTask(
-            Task{f1, f2, DGrid({{-0.5, 0.5},
-                                {-0.5, 0.5}})}, 1.0, y_c);
-    testTask(
-            Task{f1, f2, DGrid({{0.0, 0.8},
-                                {0.0, 0.8}})}, 1.2, y_c);
+            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{0, 1},
+                                                  {0, 1}})}, x_c, y_c);
+//    testTask(
+//            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{0, 1},
+//                                                  {0, 1}})}, x_c, y_c);
+//    testTask(
+//            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{-0.5, 0.5},
+//                                                  {-0.5, 0.5}})}, x_c, y_c);
+//    testTask(
+//            Task{f1_d, f1_di, f2_d, f2_di, DGrid({{0.0, 0.8},
+//                                                  {0.0, 0.8}})}, x_c, y_c);
     return 0;
 }

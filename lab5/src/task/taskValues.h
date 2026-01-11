@@ -1,12 +1,4 @@
 #pragma once
 
-#include "../names.h"
-
-double f1(const DIAV &x) {
-    return x.getDim();
-}
-
-double f2(const DIAV &x) {
-    return x.getDim();
-}
-
+static double x_c = 0.0;
+static double y_c = 0.0;
