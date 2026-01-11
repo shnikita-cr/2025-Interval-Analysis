@@ -31,8 +31,17 @@
 *.out
 *.app
 
-*/.idea
-*/cmake-build-debug
+**/.idea
+**/cmake-build-debug
 lab*/report/*.pdf
-/lab*/src/cmake-build-debug
-/lab3/fig/temp
+lab*/temp
+
+**/data
+**/log
+*.aux
+*.bbl
+*.log
+*.toc
+*.txss2
+*.blg
+*.synctex.gz
