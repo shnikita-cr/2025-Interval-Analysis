@@ -1,0 +1,208 @@
+\documentclass[40pt,a4paper]{article}
+
+\usepackage{graphicx, amsmath, amsfonts, listings}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,english]{babel}
+\usepackage{geometry, tocloft}
+
+\geometry{a4paper,left=15mm,top=15mm}
+
+\graphicspath{{./images/}}
+
+% Переименование оглавления
+\addto\captionsenglish{\renewcommand{\contentsname}{Содержание}}
+
+% Настройки межстрочных отступов в оглавлении
+\setlength\cftparskip{1.2pt}
+\setlength\cftbeforesecskip{1.3pt}
+\setlength\cftaftertoctitleskip{2pt}
+
+% Добавление точки после номера раздела
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\makeatother
+
+% Добавление точек в оглавление
+\let\savenumberline\numberline
+\def\numberline#1{\savenumberline{#1.}}
+
+
+\begin{document}
+	
+	\begin{titlepage}
+		\centering
+		
+		{\LARGE\bfseries Министерство образования и науки Российской Федерации}
+		
+		\vspace{0.5cm}
+		
+		{\LARGE\bfseries Санкт-Петербургский политехнический университет Петра Великого
+		}
+		
+		\vspace{1.5cm}
+		
+		{\Large Отчет по лабораторной работе №1 по дисциплине}
+		{\Large “Интервальный анализ”}
+		
+		\vspace{1cm}
+		
+		{\Large \textit{Вырожденность интервальной матрицы}}
+		
+		\vspace{16cm}
+		
+		\begin{center}
+			\begin{tabular}{ r l c }
+				Выполнил                       \\ 
+				студент гр. 5030102/20201 & Н.А.Морщинин \\  
+				преподаватель             & А.Н.Баженов
+			\end{tabular}
+		\end{center}
+		\vfill
+		
+	\end{titlepage}
+	
+	\thispagestyle{empty} 
+	
+	\newpage
+	
+	\tableofcontents
+	
+	\newpage
+	\section{Введение}
+	\subsection{Постановка задачи}
+	Дана прямоугольная матрица А с параметром $\delta$, элементами которой являются интервалы $[a_{ij},b_{ij}]$. 
+	Необходимо найти минимальный параметр $\delta>0$, при котором определитель подматрицы $[d_a, d_b]$ будет содержать 0:
+	
+	\begin{math}
+		\begin{vmatrix}
+			A
+		\end{vmatrix}
+		= 
+		\begin{vmatrix}
+			A(\delta)
+		\end{vmatrix}
+		= [d_a, d_b]:
+		0 \in [d_a, d_b]
+	\end{math}
+	
+	\subsection{Условия}
+	\begin{math}
+		A_1 = 
+		\begin{pmatrix}
+			[0.95-\delta, 0.95+\delta] & [1-\delta, 1+\delta] \\
+			[1.05-\delta, 1.05+\delta] & [1-\delta, 1+\delta] \\
+			[1.10-\delta, 1.10+\delta] & [1-\delta, 1+\delta] \\
+		\end{pmatrix}
+		,
+		A_2 = 
+		\begin{pmatrix}
+			[0.95-\delta, 0.95+\delta] & [1,1] \\
+			[1.05-\delta, 1.05+\delta] & [1,1] \\
+			[1.10-\delta, 1.10+\delta] & [1,1] \\
+		\end{pmatrix}
+	\end{math}
+	
+	\section{Теория}
+	\subsection{Определитель квадратной матрицы}
+	\paragraph{Для квадратной матрицы $A^{2,2}$ может быть вычислен следующим образом:}
+	
+	\begin{math}
+		\begin{vmatrix}
+			a & b \\
+			c & d \\
+		\end{vmatrix}
+		= ad-bc
+	\end{math}
+	
+	
+	\paragraph{Для квадратной матрицы большей размерности существует общая формула вычисления определителя: }
+	\paragraph{Для любой строки $i$:}
+	
+	\begin{math}
+		\det(A) = \sum_{j=1}^n (-1)^{i+j} a_{ij} \cdot M_{ij}
+	\end{math}
+	
+	\paragraph{Для любого столбца $j$:}
+	
+	\begin{math}
+		\det(A) = \sum_{i=1}^n (-1)^{i+j} a_{ij} \cdot M_{ij}
+	\end{math}
+	
+	\paragraph{где $M_{ij}$ — дополнительный минор элемента $a_{ij}$.}
+	
+	\subsection{Определитель прямоугольной матрицы}
+	
+	Для вычисления определителя прямоугольной матрицы в данной задаче нужно перебрать все квадратные подматрицы матрицы $A$, порядка, не меньшего чем $min(n,m)$, и проверить условие на содержание нуля для всех определителей.
+	
+	\subsection{Операции с интервалами}
+	
+	Для интервалов вида $[a,b]$, $a<b$ определены следующие операции:
+	\begin{itemize}
+		\item \textbf{Сложение ``+''}: $[a,b] + [c,d] = [a + c, b + d]$
+		
+		\item \textbf{Вычитание ``-''}: $[a,b] - [c,d] = [a - d, b - c]$
+		
+		\item \textbf{Умножение ``*''}: 
+		$[a,b] \cdot [c,d] = [\min\{ac, ad, bc, bd\}, \max\{ac, ad, bc, bd\}]$
+		
+		\item \textbf{Деление ``/''}: 
+		$[a,b] / [c,d] = [a,b] \cdot [1/d, 1/c]$, при условии $0 \notin [c,d]$
+	\end{itemize}
+	
+	\newpage
+	
+	\section{Реализация}
+	
+	\subsection{Алгоритм}
+	
+	Пусть есть одномерная функция f, принимающая два значения \{0, 1\}:
+	$
+	f(\delta) = (0 \in 
+	\begin{vmatrix}
+		A(\delta)
+	\end{vmatrix})
+	$
+	
+	Тогда для решения задачи нужно найти такое минимальное значение, при котором f имеет скачок и меняет свое значение с 0 на 1.
+	
+	Решение реализуем с помощью метода пробных точек.
+	
+	\subsection{Псевдокод алгоритма}
+	
+	Вход:
+	\begin{enumerate}
+		\item A, B (границы отрезка, в котором ищем $\delta$)
+		\item Точность поиска $\epsilon$
+		\item f - функция для вычисления
+	\end{enumerate}
+	Выход: 
+	Значение $\delta = min _{\delta \in [A,B]} (f(\delta))=1$
+	
+	\begin{enumerate}
+		\item Инициализация $n$: $n = \frac{B-A}{\epsilon}$ - количество точек для разбиения отрезка.
+		\item Инициализация $x_i, y_i$ ($x_i$ строятся по равномерной сетке, $y_i = f(x_i), i  = \overline{1,n}$).
+		\item Проверка условия: $|b - a| > 2 \epsilon$, если условие не выполняется, то выход из итераций вывод ответа.
+		\item Итерация по $x_i$:
+		\begin{enumerate}
+			\item Если для некоторого $i\neq 1: f(x_{i-1})=0 \ \&\ f(x_i)=1$, то нашли точку скачка, уточняем отрезок: $A=x_{i-1}, B=x_i$, переходим к шагу 1.
+			\item Иначе продолжаем итерации.
+		\end{enumerate}
+	\end{enumerate}
+	
+	\newpage
+	
+	\section{Выводы}
+	
+	\subsection{Результат}
+	
+	Для $A_1: \delta = 0.013$ \newline
+	Для $A_2: \delta = 0.075$
+	
+	\subsection{Интерпретация результата}
+	
+	По значениям $\delta$ видно, как быстро матрица с такими значениями начинает превращаться в вырожденную.
+	
+\end{document}
+
+
