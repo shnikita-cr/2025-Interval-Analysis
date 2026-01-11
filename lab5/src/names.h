@@ -10,4 +10,4 @@ using DIAM = AMatrix<DI>;
 using DIAV = AVector<DI>;
 using DV = AVector<double>;
 using DM = AMatrix<double>;
-using DP = Point<AVector<double>, double>;
+using DP = Point<AVector<double>>;

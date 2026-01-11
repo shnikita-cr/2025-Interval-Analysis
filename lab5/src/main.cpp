@@ -1,27 +1,21 @@
+#include "task/task.h"
+#include "task/taskValues.h"
 #include "test/test.h"
-#include "task/input.h"
-#include "task/preprocess.h"
+
 
 int main() {
-    std::string name1 = "../input/-0.205_lvl_side_a_fast_data.bin",
-            name2 = "../input/0.225_lvl_side_a_fast_data.bin";
-    InputFile file1 = InputFile::read(name1);
-    InputFile file2 = InputFile::read(name2);
-
-    DV Xd{file1.flattenVolts()};
-    DV Yd{file2.flattenVolts()};
-
-    double N = 14;
-    double rad = 1 / std::pow(2, N);
-    DIAV X = puff(Xd, rad);
-    DIAV Y = puff(Yd, rad);
-
-    DI aRange(0.0, 1.0);
-    DI tRange(-2.0, 0.0);
-
-//    testB1(X, Y, 0.001, aRange, tRange, 151);
-    testB2(X, Y, 0.001, aRange, tRange, 1000000);
-//    testB3(X, Y, 0.001, aRange, tRange, 1000000);
-//    testB4(X, Y, 0.001, aRange, tRange, 1000000);
+    double y_c = 0;
+    testTask(
+            Task{f1, f2, DGrid({{0, 1},
+                                {0, 1}})}, 0.0, y_c);
+    testTask(
+            Task{f1, f2, DGrid({{0, 1},
+                                {0, 1}})}, 0.5, y_c);
+    testTask(
+            Task{f1, f2, DGrid({{-0.5, 0.5},
+                                {-0.5, 0.5}})}, 1.0, y_c);
+    testTask(
+            Task{f1, f2, DGrid({{0.0, 0.8},
+                                {0.0, 0.8}})}, 1.2, y_c);
     return 0;
 }

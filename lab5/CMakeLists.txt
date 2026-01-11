@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 add_executable(lab5
         src/main.cpp
         src/main.h
-        src/secondary/tech/print_all.h
+        src/secondary/print_all.h
         src/secondary/interval/interval.h
         src/task/task.h
         src/test/test.h
@@ -16,10 +16,10 @@ add_executable(lab5
         src/secondary/amatrix/amatrix.cpp
         "src/secondary/equations/equation solving.h"
         src/secondary/logger.h
-        src/calc/calc.cpp src/secondary/tech/dgridresult.h src/secondary/tech/dgrid.h
+        src/calc/calc.cpp src/secondary/tech/dgridresult.h
+        src/secondary/tech/dgrid.h
         src/secondary/tech/point.h
         src/secondary/tech/evaluate_grid.h
+        src/secondary/tech/evaluate_grid.cpp
         src/secondary/flogger.h
-        src/task/input.h
-        src/task/preprocess.h 
-        src/secondary/tech/evaluate_grid.cpp)
+        src/task/taskValues.h)

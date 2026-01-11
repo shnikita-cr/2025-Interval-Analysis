@@ -3,10 +3,12 @@
 #include <chrono>
 #include "dgridresult.h"
 #include "dgrid.h"
+#include "../../names.h"
 
-DGridResult evaluate_grid(
+template<typename T>
+DGridResult<T> evaluate_grid(
         const DGrid &grid,
-        const std::function<double(const AVector<double>&)> &func,
+        const std::function<double(const AVector<T> &)> &func,
         size_t points_per_dim = 2,
         bool show_progress = true,
         size_t progress_bar_width = 30,

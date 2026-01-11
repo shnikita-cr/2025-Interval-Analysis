@@ -1,18 +1,14 @@
 #pragma once
 
 #include "../names.h"
+#include "../secondary/tech/dgrid.h"
 
-template<class F>
 struct Task {
-    DIAV X;
-    DIAV Y;
-    F func;
+    std::function<double(const DIAV &)> f1;
+    std::function<double(const DIAV &)> f2;
 
-    Task(const DIAV &x, const DIAV &y, F func) : X(x), Y(y), func(func) {
-        validate();
-    }
+    DGrid dGrid;
 
-    bool validate() {
-        return (X.getDim() == Y.getDim());
-    }
+    Task(const std::function<double(const DIAV &)> &f1, const std::function<double(const DIAV &)> &f2,
+         const DGrid &dGrid) : f1(f1), f2(f2), dGrid(dGrid) {}
 };

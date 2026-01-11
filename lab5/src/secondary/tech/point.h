@@ -1,11 +1,11 @@
 #pragma once
 
-template<typename Coord, typename Value>
+template<typename Coord>
 class Point {
     Coord x;
-    Value y;
+    double y;
 public:
-    Point(Coord _x, Value _y) : x(_x), y(_y) {}
+    Point(Coord _x, double _y) : x(_x), y(_y) {}
 
     Coord getX() const {
         return x;
@@ -15,11 +15,11 @@ public:
         Point::x = _x;
     }
 
-    Value getY() const {
+    double getY() const {
         return y;
     }
 
-    void setY(Value _y) {
+    void setY(double _y) {
         Point::y = _y;
     }
 

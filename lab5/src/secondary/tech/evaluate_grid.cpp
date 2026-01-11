@@ -2,18 +2,25 @@
 #include <stdexcept>
 #include <chrono>
 #include <iostream>
-#include <iomanip>
+#include <type_traits>
+#include <sstream>
 
+#include <iomanip>
 #include "dgridresult.h"
 #include "dgrid.h"
+#include "evaluate_grid.h"
 
-DGridResult evaluate_grid(
+template<typename T>
+DGridResult<T> evaluate_grid(
         const DGrid &grid,
-        const std::function<double(const AVector<double>&)> &func,
+        const std::function<double(const AVector<T> &)> &func,
         size_t points_per_dim,
         bool show_progress,
         size_t progress_bar_width,
         std::chrono::milliseconds progress_update_period) {
+
+    static_assert(std::is_arithmetic<T>::value, "evaluate_grid<T>: T must be an arithmetic type");
+
     const auto &bounds = grid.getBounds();
     const size_t n = bounds.size();
 
@@ -30,7 +37,7 @@ DGridResult evaluate_grid(
         total_points *= points_per_dim;
     }
 
-    std::vector<std::vector<double>> dim_coords(n);
+    std::vector<std::vector<T>> dim_coords(n);
     for (size_t dim = 0; dim < n; ++dim) {
         const double down = bounds[dim].getDown();
         const double up = bounds[dim].getUp();
@@ -38,14 +45,29 @@ DGridResult evaluate_grid(
 
         dim_coords[dim].resize(points_per_dim);
         for (size_t i = 0; i < points_per_dim; ++i) {
-            dim_coords[dim][i] = down + static_cast<double>(i) * step;
+            const double v = down + static_cast<double>(i) * step;
+            dim_coords[dim][i] = static_cast<T>(v);
         }
     }
 
-    DGridResult result;
+    DGridResult<T> result;
     result.points.reserve(total_points);
 
     std::vector<size_t> indices(n, 0);
+    AVector<T> point(n);
+
+    auto format_hms = [](double sec) -> std::string {
+        if (sec < 0.0) sec = 0.0;
+        const long long s = static_cast<long long>(sec + 0.5);
+        const long long hh = s / 3600;
+        const long long mm = (s % 3600) / 60;
+        const long long ss = s % 60;
+        std::ostringstream os;
+        os << std::setfill('0') << std::setw(2) << hh << ":"
+           << std::setw(2) << mm << ":"
+           << std::setw(2) << ss;
+        return os.str();
+    };
 
     auto print_progress = [&](size_t done, std::chrono::steady_clock::time_point start) {
         if (!show_progress) return;
@@ -56,29 +78,15 @@ DGridResult evaluate_grid(
         if (filled > progress_bar_width) filled = progress_bar_width;
 
         const auto now = std::chrono::steady_clock::now();
-        const auto elapsed = now - start;
-        const double elapsed_sec = std::chrono::duration<double>(elapsed).count();
+        const double elapsed_sec = std::chrono::duration<double>(now - start).count();
 
         double eta_sec = 0.0;
         if (done > 0 && elapsed_sec > 0.0) {
             const double rate = static_cast<double>(done) / elapsed_sec;
             if (rate > 0.0) {
-                eta_sec = (static_cast<double>(total_points - done)) / rate;
+                eta_sec = static_cast<double>(total_points - done) / rate;
             }
         }
-
-        auto format_hms = [](double sec) {
-            if (sec < 0.0) sec = 0.0;
-            const long long s = static_cast<long long>(sec + 0.5);
-            const long long hh = s / 3600;
-            const long long mm = (s % 3600) / 60;
-            const long long ss = s % 60;
-            std::ostringstream os;
-            os << std::setfill('0') << std::setw(2) << hh << ":"
-               << std::setw(2) << mm << ":"
-               << std::setw(2) << ss;
-            return os.str();
-        };
 
         std::cerr << "\r[";
         for (size_t i = 0; i < progress_bar_width; ++i) {
@@ -100,7 +108,6 @@ DGridResult evaluate_grid(
     }
 
     for (size_t point_idx = 0; point_idx < total_points; ++point_idx) {
-        AVector<double> point(n);
         for (size_t dim = 0; dim < n; ++dim) {
             point[dim] = dim_coords[dim][indices[dim]];
         }

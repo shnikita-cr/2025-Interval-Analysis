@@ -6,9 +6,9 @@
 #include "../avector/avector.h"
 #include "point.h"
 
+template<typename T>
 struct DGridResult {
-    std::vector<Point<AVector<double>, double>>
-            points;
+    std::vector<Point<AVector<T>>> points;
 
     friend std::ostream &operator<<(std::ostream &os, const DGridResult &result) {
         for (const auto &point: result.points) {
@@ -22,10 +22,10 @@ struct DGridResult {
         of << *this << std::endl;
     }
 
-    Point<AVector<double>, double> getMax() {
+    Point<AVector<T>> getMax() {
         auto max = std::max_element(points.begin(), points.end(),
-                                    [](const Point<AVector<double>, double> &a,
-                                       const Point<AVector<double>, double> &b) -> bool {
+                                    [](const Point<AVector<T>> &a,
+                                       const Point<AVector<T>> &b) -> bool {
                                         return a.getY() < b.getY();
                                     });
 
