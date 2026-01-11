@@ -109,6 +109,7 @@ inline DI f2_g(DI x) {
 
 inline DI f2_p(DI x) {
     return 5 * x.map(pow, 4) - 6 * x.map(pow, 2) + cos_i_strict(x);
+//    return x.map(pow, 2) * (5 * x.map(pow, 2) - 6) + cos_i_strict(x);
 }
 
 inline DI X2 = {0, 1.5};
