@@ -1,3 +1,9 @@
 data
 log
-report
+*.aux
+*.bbl
+*.log
+*.toc
+*.txss2
+*.blg
+*.synctex.gz

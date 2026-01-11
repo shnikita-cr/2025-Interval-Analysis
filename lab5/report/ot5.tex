@@ -1,0 +1,196 @@
+\documentclass[40pt,a4paper]{article}
+
+\usepackage{graphicx, amsmath, amsfonts, listings}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,english]{babel}
+\usepackage{geometry, tocloft}
+\usepackage{hyperref}
+
+\geometry{a4paper,left=15mm,top=15mm}
+
+\graphicspath{{./images/}}
+
+% Переименование оглавления
+\addto\captionsenglish{\renewcommand{\contentsname}{Содержание}}
+
+% Настройки межстрочных отступов в оглавлении
+\setlength\cftparskip{1.2pt}
+\setlength\cftbeforesecskip{1.3pt}
+\setlength\cftaftertoctitleskip{2pt}
+
+% Добавление точки после номера раздела
+\makeatletter
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname.\quad}
+\makeatother
+
+% Добавление точек в оглавление
+\let\savenumberline\numberline
+\def\numberline#1{\savenumberline{#1.}}
+
+\newcommand{\ran}{\mathrm{ran}}
+\newcommand{\rad}{\mathrm{rad}}
+\newcommand{\dist}{\mathrm{dist}}
+
+\begin{document}
+
+\begin{titlepage}
+\centering
+
+{\LARGE\bfseries Министерство образования и науки Российской Федерации}
+
+\vspace{0.5cm}
+
+{\LARGE\bfseries Санкт-Петербургский политехнический университет Петра Великого
+}
+
+\vspace{1.5cm}
+
+{\Large Отчет по лабораторной работе №5 по дисциплине}
+{\Large “Интервальный анализ”}
+
+\vspace{1cm}
+
+{\Large \textit{Решение интервальных систем нелинейных уравнений}}
+
+\vspace{16cm}
+
+\begin{center}
+\begin{tabular}{ r l c }
+ Выполнил                       \\ 
+ студент гр. 5030102/20201 & Н.А.Морщинин \\  
+ преподаватель             & А.Н.Баженов
+\end{tabular}
+\end{center}
+\vfill
+
+\end{titlepage}
+
+\thispagestyle{empty} 
+
+\newpage
+
+\tableofcontents
+
+\newpage
+\section{Введение}
+\subsection{Постановка задачи}
+
+Задана система нелинейных уравнений, описывающая точку касания $f_1$ и $f_2$.
+
+\[
+f(X)=\begin{cases}
+f_1(X) = X_1-X_2^2 = 0\\
+f_2(X) = (X_1-x_c)^2 + (X_2-y_c)^2-1=0\\
+\end{cases}
+\]
+
+где $x_c$ - параметр, принимающий значения из набора $\{0,0.5,1.0,1.2\}$, $y_c$=0.
+
+\begin{enumerate}
+	\item Для каждого значения параметра $x_c$ из заданного набора:
+	\begin{enumerate}
+		\item Выбрать начальное интервальное приближение $X^{(0)}=[X_1]\times[X_2]$, обеспечивающее старт итерационного процесса.
+		\item Выполнить не менее трех итераций методом Кравчика для уточнения локализации решения.
+		\item На каждом шаге фиксировать получающиеся интервальные векторы $X^{(k)}$
+	\end{enumerate}
+	\item Провести анализ результатов:
+	\begin{enumerate}
+		\item Для каждого $x_c$ построить графическую иллюстрацию, отображающую последовательные приближения (брусы $X^{(k)}$) и линии уровней функций $f_1(X)=0$ и $f_2(X)=0$.
+		\item Сравнить скорость сходимости метода для разных значений параметра $x_c$. Объяснить наблюдаемые различия.
+		\item Проанализировать влияние выбора начального приближения $X^{(0)}$ на возможность старта и сходимость итерационного процесса.
+	\end{enumerate}
+\end{enumerate}
+
+
+% В ходе работы следует обратить внимание на возможное расширение интервалов на некоторых итерациях (как в приведённом примере для координаты x1) и связать это с геометрической интерпретацией задачи
+
+
+\subsection{Условия задачи}
+
+Начальное приближение: 
+
+\begin{enumerate}
+	\item $X_1 \times X_2 = [0.0,1.0]\times[0.0,1.0]$
+	\item $X_1 \times X_2 = [0.5,1.5]\times[0.5,1.5]$
+	\item $X_1 \times X_2 = [0.7,1.5]\times[0.7,1.5]$
+	\item $X_1 \times X_2 = [0.4,0.6]\times[0.6,0.75]$
+\end{enumerate}
+
+\newpage
+
+\section{Теория}
+
+\paragraph{Метод Кравчика}
+
+Рассматривается система нелинейных уравнений
+\[
+F_i(x)=0,\qquad F_i:\mathbb{R}^n\to\mathbb{R}^n.
+\]
+Пусть $X\subset\mathbb{R}^n$ --- интервальный вектор (брус), $x_0\in X$ --- опорная точка (обычно середина $x_0=\mathrm{mid}(X)$), а $J(X)$ --- интервальное расширение якобиана $F'(x)$ на $X$.
+Выберем невырожденную матрицу $C\in\mathbb{R}^{n\times n}$, аппроксимирующую $(F'(x_0))^{-1}$
+\[
+C = \bigl(F'(x_0)\bigr)^{-1}.
+\]
+
+\paragraph{Оператор Кравчика.}
+Оператор Кравчика $K(X)$ определяется формулой
+\[
+K(X) \;=\; x_0 - C\,F(x_0) \;+\; \bigl(I - C\,J(X)\bigr)\,(X - x_0),
+\]
+где $I$ --- единичная матрица, а произведения/суммы понимаются как интервальные (для матриц/векторов).
+
+\paragraph{Итерационный процесс.}
+Последовательность уточняющих брусьев строится пересечением
+\[
+X^{(k+1)} \;=\; X^{(k)} \cap K\!\left(X^{(k)}\right),\qquad k=0,1,2,\dots
+\]
+Если на некотором шаге $X^{(k+1)}=\emptyset$, то корней в исходном $X^{(k)}$ не содержится.
+
+\paragraph{Критерий существования и единственности.}
+Если выполнено строгое включение
+\[
+K(X)\subset \mathrm{int}(X),
+\]
+то в $X$ существует единственное решение $x^\ast$ уравнения $F(x)=0$.
+(В частности, тогда итерации с пересечением дают сужающуюся локализацию решения.)
+
+
+\textit{Код доступен по ссылке:} \url{https://github.com/shnikita-cr/2025-Interval-Analysis/tree/lab5/lab5}
+
+\newpage
+
+\section{Выводы}
+
+\subsection{Результаты}
+
+\subsection*{Вычисления для параметра $x_c = 0.0$}
+\includegraphics[scale=0.5]{images/0.0/plot.png}
+\includegraphics[scale=0.5]{images/0.0/x_k_iter.png}
+
+\subsection*{Вычисления для параметра $x_c = 0.5$}
+\includegraphics[scale=0.5]{images/0.5/plot.png}
+\includegraphics[scale=0.5]{images/0.5/x_k_iter.png}
+
+\subsection*{Вычисления для параметра $x_c = 1.0$}
+\includegraphics[scale=0.5]{images/1.0/plot.png}
+\includegraphics[scale=0.5]{images/1.0/x_k_iter.png}
+
+\subsection*{Вычисления для параметра $x_c = 1.2$}
+\includegraphics[scale=0.5]{images/1.2/plot.png}
+\includegraphics[scale=0.5]{images/1.2/x_k_iter.png}
+
+
+\subsection{Интерпретация результата}
+
+\includegraphics[scale=0.5]{images/compare.png}
+\begin{itemize}
+	\item Лучшие сходимости при параметрах $x_c=0.0, x_c=0.5$, кривые явно пересекаются , наихудшая сходимость при параметра $x_c=1.2$, кривые неявно пересекаются, стремятся к касанию.
+	\item По расположению точки пересечения и расположению кривых в случае первых трех параметров интервалы были выбраны довольно широкими, при них наблюдалась сходимость. Для четвертого случая для сходимости начальные интервалы пришлось существенно сузить, иначе итерационный процесс не начинался. 
+	\item Не все интервалы возможны для выбора в качестве начальных: при нахождении двух корней в приближении или в случае, если в интервал $X_2$ попадал ноль, итерационный процесс не сходился или не начинался из-за особенностей метода (вычисление якобиана).
+\end{itemize}
+
+\end{document}
+
+
+    
