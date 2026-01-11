@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.25)
-project(lab4)
+project(lab5)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(lab4
+add_executable(lab5
         src/main.cpp
         src/main.h
         src/secondary/tech/print_all.h
@@ -21,4 +21,5 @@ add_executable(lab4
         src/secondary/tech/evaluate_grid.h
         src/secondary/flogger.h
         src/task/input.h
-        src/task/preprocess.h src/secondary/tech/evaluate_grid.cpp)
+        src/task/preprocess.h 
+        src/secondary/tech/evaluate_grid.cpp)
